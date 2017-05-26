@@ -15,6 +15,11 @@
     background-color:#29e4ee;border-bottom-left-radius:45%;
     border-bottom-right-radius:45%;
 }
+.footer-cls{
+        background-color: white !important;
+    border-top-left-radius: 20%;
+    border-top-right-radius: 20%;
+}
 .list .item-toggle{
     white-space: normal;
 }

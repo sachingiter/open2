@@ -16,19 +16,42 @@
             <div class="item" ng-click="modal.hide()">
                 Invite friends
             </div>
-            <div class="item" ui-sref="notification" ng-click="modal.hide()">
+            <div class="item" ui-sref="notification" >
                 Notification
             </div>
-            <div class="item" ng-click="modal.hide()">
+            <div class="item" ui-sref="appfeedback" >
                 App Feedback
             </div>
-            <div class="item" ng-click="modal.hide()">
+            <div class="item" ui-sref="approve" >
                 Approve Open2ers
             </div>
+        </div>
+
+        <div class="text-center" style="margin-top: 50px;"  >
+            <a ui-sref="login" ><img src="img/group.png" width="60%" /></a>
         </div>
 
 
 
     </ion-content>
+
+
+
+    <ion-footer-bar align-title="center" class="bar-clear" style="height:56px;padding:0px">
+
+        <div class="footer-cls" style="text-align:center;width: 100vw;height:80px;background-color:transparent">
+           <div class="row" style="margin-top: 20px; padding: 0px;">
+            <div class="col text-center fmenu" style="padding: 0px;">
+              <ul>
+                <li style="color: grey;">2017 Open2.co.Inc</li>
+                <li ><a href="#" style="color: grey;">Legal Polices</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+
+
+    </ion-footer-bar>
 
 </ion-view>

@@ -46,6 +46,20 @@ angular.module('starter', ['ionic', 'menu.controllers'])
 
     })
 
+  .state('appfeedback', {
+        url: '/appfeedback',
+        templateUrl: 'templates/appfeedback.html'
+
+
+    })
+
+  .state('approve', {
+        url: '/approve',
+        templateUrl: 'templates/approve.html'
+
+
+    })
+
    .state('nav', {
         url: '/nav',
         templateUrl: 'templates/nav.html'
