@@ -59,6 +59,12 @@ angular.module('starter', ['ionic', 'menu.controllers'])
 
 
     })
+  .state('location', {
+        url: '/location',
+        templateUrl: 'templates/location.html'
+
+
+    })
 
    .state('nav', {
         url: '/nav',
