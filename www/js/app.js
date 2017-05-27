@@ -59,6 +59,25 @@ angular.module('starter', ['ionic', 'menu.controllers'])
 
 
     })
+  .state('location', {
+        url: '/location',
+        templateUrl: 'templates/location.html'
+
+
+    })
+  .state('select', {
+        url: '/select',
+        templateUrl: 'templates/select.html'
+
+
+    })
+
+  .state('selected', {
+        url: '/selected',
+        templateUrl: 'templates/selected.html'
+
+
+    })
 
    .state('nav', {
         url: '/nav',
