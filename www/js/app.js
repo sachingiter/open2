@@ -5,86 +5,86 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('starter', ['ionic', 'menu.controllers'])
 
-.run(function($ionicPlatform) {
-  $ionicPlatform.ready(function() {
-    if(window.cordova && window.cordova.plugins.Keyboard) {
-      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-      // for form inputs)
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+.run(function ($ionicPlatform) {
+    $ionicPlatform.ready(function () {
+        if (window.cordova && window.cordova.plugins.Keyboard) {
+            // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+            // for form inputs)
+            cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
 
-      // Don't remove this line unless you know what you are doing. It stops the viewport
-      // from snapping when text inputs are focused. Ionic handles this internally for
-      // a much nicer keyboard experience.
-      cordova.plugins.Keyboard.disableScroll(true);
-    }
-    if(window.StatusBar) {
-      StatusBar.styleDefault();
-    }
-  });
+            // Don't remove this line unless you know what you are doing. It stops the viewport
+            // from snapping when text inputs are focused. Ionic handles this internally for
+            // a much nicer keyboard experience.
+            cordova.plugins.Keyboard.disableScroll(true);
+        }
+        if (window.StatusBar) {
+            StatusBar.styleDefault();
+        }
+    });
 }).config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
-  $stateProvider
+    $stateProvider
 
-  .state('login', {
+    .state('login', {
         url: '/login',
         templateUrl: 'templates/login.html'
 
 
     })
 
-  .state('menu', {
+    .state('menu', {
         url: '/menu',
         templateUrl: 'templates/menu.html',
-      controller:'menuCtrl'
+        controller: 'menuCtrl'
 
     })
 
-  .state('notification', {
+    .state('notification', {
         url: '/notification',
         templateUrl: 'templates/notification.html'
 
 
     })
 
-  .state('appfeedback', {
+    .state('appfeedback', {
         url: '/appfeedback',
         templateUrl: 'templates/appfeedback.html'
 
 
     })
 
-  .state('approve', {
+    .state('approve', {
         url: '/approve',
         templateUrl: 'templates/approve.html'
 
 
     })
-  .state('location', {
+    .state('location', {
         url: '/location',
         templateUrl: 'templates/location.html'
 
 
     })
-  .state('select', {
+    .state('select', {
         url: '/select',
         templateUrl: 'templates/select.html'
 
 
     })
 
-  .state('selected', {
+    .state('selected', {
         url: '/selected',
         templateUrl: 'templates/selected.html'
 
 
     })
 
-   .state('nav', {
-        url: '/nav',
-        templateUrl: 'templates/nav.html'
+     .state('nav', {
+         url: '/nav',
+         templateUrl: 'templates/nav.html'
 
 
-    });
+     });
 
     $urlRouterProvider.otherwise('/login');
 
