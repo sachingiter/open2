@@ -39,6 +39,13 @@ angular.module('starter', ['ionic', 'menu.controllers'])
 
     })
 
+    .state('menu1', {
+        url: '/menu1',
+        templateUrl: 'templates/menu1.html',
+        controller: 'menu1Ctrl'
+
+    })
+
     .state('notification', {
         url: '/notification',
         templateUrl: 'templates/notification.html'
@@ -52,6 +59,14 @@ angular.module('starter', ['ionic', 'menu.controllers'])
 
 
     })
+
+    .state('policy', {
+        url: '/policy',
+        templateUrl: 'templates/policy.html'
+
+
+    })
+
 
     .state('approve', {
         url: '/approve',
@@ -75,6 +90,12 @@ angular.module('starter', ['ionic', 'menu.controllers'])
     .state('selected', {
         url: '/selected',
         templateUrl: 'templates/selected.html'
+
+
+    })
+    .state('picture', {
+        url: '/picture',
+        templateUrl: 'templates/picture.html'
 
 
     })

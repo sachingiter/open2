@@ -126,17 +126,16 @@ body .navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover 
   .box-input .green{ background-image:url(../img/areagreen.jpg); background-size:100% 100%; width:100%; height:46px; border:none; border-radius:10px 10px 0px 0px; text-align:center;}
     .box-input .red{ background-image:url(../img/areared.jpg); background-size:100% 100%; width:100%; height:46px; border:none; border-radius:0px 0px 10px 10px;text-align:center;}
     .box-input {
-    max-width: 800px;
-    position: absolute;
+   
     top: 80px;
-    width: 94%;
+    width: 100%;
 }
-.selectbox{ position:absolute; top:150px;  background-color: white;
+.selectbox{ position:absolute; top:130px;  background-color: white;
     border-radius: 10px;
     margin: 10px;
     text-align: center;
     width: 93%; padding:10px;}
-.box-input hr{ margin:0; border-color:#979797; border-width:2px;}
+
 .icm img{ max-width:80px;}
 .imgbox{ margin-top:20px; border-top:2px solid black; margin-bottom:10px;}
 .selectbox p{ font-size:22px;}
