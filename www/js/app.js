@@ -27,15 +27,21 @@ angular.module('starter', ['ionic', 'menu.controllers'])
 
     .state('login', {
         url: '/login',
-        templateUrl: 'templates/login.html'
-
-
+        templateUrl: 'templates/login.html',
+        controller: 'loginCtrl'
     })
 
     .state('menu', {
         url: '/menu',
         templateUrl: 'templates/menu.html',
         controller: 'menuCtrl'
+
+    })
+
+    .state('menu1', {
+        url: '/menu1',
+        templateUrl: 'templates/menu1.html',
+        controller: 'menu1Ctrl'
 
     })
 
@@ -52,6 +58,14 @@ angular.module('starter', ['ionic', 'menu.controllers'])
 
 
     })
+
+    .state('policy', {
+        url: '/policy',
+        templateUrl: 'templates/policy.html'
+
+
+    })
+
 
     .state('approve', {
         url: '/approve',
@@ -75,6 +89,25 @@ angular.module('starter', ['ionic', 'menu.controllers'])
     .state('selected', {
         url: '/selected',
         templateUrl: 'templates/selected.html'
+
+
+    })
+    .state('picture', {
+        url: '/picture',
+        templateUrl: 'templates/picture.html'
+
+
+    })
+    .state('popup1', {
+        url: '/popup1',
+        templateUrl: 'templates/popup1.html'
+
+
+    })
+    
+    .state('popup2', {
+        url: '/popup2',
+        templateUrl: 'templates/popup2.html'
 
 
     })
