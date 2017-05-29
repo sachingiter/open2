@@ -64,12 +64,15 @@ angular.module('mapservices.factory', []).factory('mapservices', ['$http', '$q',
             }, false);
             return defer.promise;
         },
-        addMarker:function(map,position,name){
+        addMarker: function (map1, position, name, markerIcon) {
             map.addMarker({
                 position: position, //{ lat: 37.422359, lng: -122.084344 },
                 title: name,
-                snippet: "Community",
-                animation: plugin.google.maps.Animation.BOUNCE
+                snippet: "Open2",
+                animation: plugin.google.maps.Animation.BOUNCE,
+                icon:{
+     url: markerIcon
+  }
             }, function (marker) { });
 
                 // Show the info window

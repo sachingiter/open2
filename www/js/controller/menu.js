@@ -19,6 +19,8 @@ open2.controller('menuCtrl', function ($scope, $rootScope, $http, $state, mapser
         });
         myLat = position.coords.latitude;
         myLng = position.coords.longitude;
+        $scope.myLatitude=position.coords.latitude;
+        $scope.myLongitude = position.coords.longitude;
         var request = {
             'position': { "lat": position.coords.latitude, "lng": position.coords.longitude }
         };
@@ -26,7 +28,11 @@ open2.controller('menuCtrl', function ($scope, $rootScope, $http, $state, mapser
         mapservices.createMap('map', { lat: myLat, lng: myLng }, 'abc').then(function (res) {
             // map = res;
             //  mapservices.addMarker(res,)
-            mapservices.getLocationName(request).then(function (res) { $scope.currentLocation = respo.locality + ', ' + respo.adminArea; }, function (er) { })
+            mapservices.getLocationName(request).then(function (respo) {
+                $scope.currentLocation = respo.locality + ', ' + respo.adminArea;
+              
+
+            }, function (er) { })
         }, function (er) {
 
 
@@ -60,10 +66,12 @@ open2.controller('menuCtrl', function ($scope, $rootScope, $http, $state, mapser
         $scope.notSelectedEvent = true
         $scope.selectedImage= $scope.eventImages[index].imgSrc;
     }
+  //  mapservices.mapClikable(true)
     $scope.nextPage = function () {
         $scope.currentPageIndex++;
 
         $scope.notSelectedEvent = true;
+        mapservices.mapClikable(false)
         $scope.currentPage = $scope.pages[$scope.currentPageIndex];
         if ($scope.currentPageIndex == 2) {
             $scope.notSelectedEvent = false;
@@ -72,7 +80,7 @@ open2.controller('menuCtrl', function ($scope, $rootScope, $http, $state, mapser
             $state.go('picture')
         }
         if ($scope.currentPageIndex == 1) {
-
+            mapservices.addMarker('', { lat: $scope.myLatitude, lng: $scope.myLongitude }, 'Open2', 'img/destinationpin.png');
         }
     }
     $scope.onAddressSelection = function (location) {

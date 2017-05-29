@@ -28,32 +28,33 @@
         </div>
     </ion-header-bar>
     <ion-content>
-        <div class="" ng-show="currentPage=='location'">
-            <center>
-                <div class="box-input">
-                    <input type="text" style="border-radius: 10px 10px 0px 0px;" ng-class="(selectedLocation=='current')?'green':'red'" ng-click="selectedLocation='current';setCurrentLocation()" placeholder="Current Location" ng-model="currentLocation"/>
-                    <hr>
-                    <input style="border-radius: 0px 0px 10px 10px;" ng-class="(selectedLocation=='selectlocation')?'green':'red'" ng-click="selectedLocation='selectlocation'" type="text" placeholder="Enter Location" google-autocomplete-suggestion location="selectAutocompleteLocation" country-code="" on-selection="onAddressSelection(location)" ng-model="selectAutocompleteLocation.formatted_address"/>
-                </div>
-            </center>
-        </div>
-        <div class="selectbox" ng-show="currentPage=='chooseEvents'">
-            <div class="container text-center selectbox-inside">
-                <div class="row ">
-                    <center style="width:100%;">
-                        <img ng-src="{{selectedImage}}" src="img/select-event.png" style="width: 75px;margin: 0 auto;" />
-                    </center>
-                </div>
-                <div class="row">
-                    <p style="color: grey; width: 100%;margin: 0 auto;">{{eventText}}</p>
-                </div>
-                <div class="imgbox">
-                    <a ng-repeat="img in eventImages"><img ng-src="{{img.imgSrc}}" ng-click="changeImage($index);" /></a>
+       
+      
+        <div class="container-fluid p0" id="map" style="height:100%">
+            <div class="" ng-show="currentPage=='location'">
+                <center>
+                    <div class="box-input">
+                        <input type="text" style="border-radius: 10px 10px 0px 0px;" ng-class="(selectedLocation=='current')?'green':'red'" ng-click="selectedLocation='current';setCurrentLocation()" placeholder="Current Location" ng-model="currentLocation" />
+                        <hr>
+                        <input style="border-radius: 0px 0px 10px 10px;" ng-class="(selectedLocation=='selectlocation')?'green':'red'" ng-click="selectedLocation='selectlocation'" type="text" placeholder="Enter Location" google-autocomplete-suggestion location="selectAutocompleteLocation" country-code="" on-selection="onAddressSelection(location)" ng-model="selectAutocompleteLocation.formatted_address" />
+                    </div>
+                </center>
+            </div>
+            <div class="selectbox" ng-show="currentPage=='chooseEvents'">
+                <div class="container text-center selectbox-inside">
+                    <div class="row ">
+                        <center style="width:100%;">
+                            <img ng-src="{{selectedImage}}" src="img/select-event.png" style="width: 75px;margin: 0 auto;" />
+                        </center>
+                    </div>
+                    <div class="row">
+                        <p style="color: grey; width: 100%;margin: 0 auto;">{{eventText}}</p>
+                    </div>
+                    <div class="imgbox">
+                        <a ng-repeat="img in eventImages"><img ng-src="{{img.imgSrc}}" ng-click="changeImage($index);" /></a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="container-fluid p0" id="map" style="height:100%">
-           
             <div class="nextb" ng-show="currentPage=='menu'" ng-click="nextPage()"><span><i class="ion-plus" style="position: absolute;bottom: -10px;right: 24px;"></i></span></div>
             <div class="prevb" ng-click="backPage()" ng-hide="currentPage=='menu'"><span><i class="ion-chevron-left" style="position: absolute;bottom: -10px;left: 22px;"></i></span></div>
             <div class="nextb" ng-click="nextPage()" ng-hide="currentPage=='menu'" ng-show="notSelectedEvent"><span><i class="ion-chevron-right" style="position: absolute;bottom: -10px;right: 24px;"></i></span></div>
