@@ -128,16 +128,29 @@ body .navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover 
     .box-input {
     max-width: 800px;
     position: absolute;
-    top: 80px;
+  top: 115px;
     width: 80%;
     left: 30px;
 }
 .box-input hr{ margin:0; }
-.selectbox{ position:absolute; top:105px;  background-color: white;
-    border-radius: 10px;
-    margin: 10px;
+.selectbox {
+    position: absolute;
+    top: 105px;
+    background-color: white;
+    /* border-radius: 10px; */
+    /*margin: 10px;*/
     text-align: center;
-    width: 93%; padding:10px;}
+    width: 100%;
+    background: transparent;
+    /*padding: 10px;}*/
+}
+.selectbox-inside{
+    width: 90%;
+    margin: 0 auto;
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+}
 
 .icm img{ max-width:80px;}
 .imgbox{ margin-top:20px; border-top:1px solid black; margin-bottom:10px;    padding-top: 10px;}

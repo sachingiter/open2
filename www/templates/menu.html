@@ -1,25 +1,66 @@
 <ion-view>
-    <ion-header-bar align-title="center" class="bar-clear" style="height:80px;padding:0px">
-         
+    <ion-header-bar align-title="center" class="bar-clear" style="height:80px;padding:0px" ng-show="currentPage=='menu'">
+
         <div class="header-cls" style="text-align:center;width: 100vw;height:80px">
             <div class="buttons navicon-btn">
                 <button class="button-icon ion-navicon" style="color:white" ng-click="openModal()"></button>
             </div>
-        <img src="img/o2-logo-app-icon.png" width="70"/>
+            <img src="img/o2-logo-app-icon.png" width="70" />
         </div>
-        
+
 
 
     </ion-header-bar>
-<ion-content>
-<div class="container-fluid p0" id="map">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d10499.764820534638!2d2.3511447386584425!3d48.85933153586589!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e03cdce4ae9%3A0x38cfa580446f9e46!2sLe+Marais%2C+Paris%2C+France!5e0!3m2!1sen!2sin!4v1494480986783" width="100%" height="800" frameborder="0" style="border:0" allowfullscreen></iframe>
+    <ion-header-bar align-title="center" class="bar-clear" style="height:80px;padding:0px" ng-show="currentPage=='chooseEvents'">
+        <div class="header-cls" style="text-align:center;width: 100vw;height:80px;padding-top: 12px;">
+            <h4 style="color: white;    font-size: 16px;
+    font-weight: 600;">
+                Select an open 2 experience
+            </h4>
+        </div>
+    </ion-header-bar>
+    <ion-header-bar align-title="center" class="bar-clear" style="height:80px;padding:0px" ng-show="currentPage=='location'">
+        <div class="header-cls" style="text-align:center;width: 100vw;height:80px;padding-top: 10px;">
+            <h4 style="color: white;    font-size: 14px;
+    font-weight: 600;">
+                Where is your OPen2 talking place?
+            </h4>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+        <div class="" ng-show="currentPage=='location'">
+            <center>
+                <div class="box-input">
+                    <input type="text" style="border-radius: 10px 10px 0px 0px;" ng-class="(selectedLocation=='current')?'green':'red'" ng-click="selectedLocation='current';setCurrentLocation()" placeholder="Current Location" ng-model="currentLocation"/>
+                    <hr>
+                    <input style="border-radius: 0px 0px 10px 10px;" ng-class="(selectedLocation=='selectlocation')?'green':'red'" ng-click="selectedLocation='selectlocation'" type="text" placeholder="Enter Location" google-autocomplete-suggestion location="selectAutocompleteLocation" country-code="" on-selection="onAddressSelection(location)" ng-model="selectAutocompleteLocation.formatted_address"/>
+                </div>
+            </center>
+        </div>
+        <div class="selectbox" ng-show="currentPage=='chooseEvents'">
+            <div class="container text-center selectbox-inside">
+                <div class="row ">
+                    <center style="width:100%;">
+                        <img ng-src="{{selectedImage}}" src="img/select-event.png" style="width: 75px;margin: 0 auto;" />
+                    </center>
+                </div>
+                <div class="row">
+                    <p style="color: grey; width: 100%;margin: 0 auto;">{{eventText}}</p>
+                </div>
+                <div class="imgbox">
+                    <a ng-repeat="img in eventImages"><img ng-src="{{img.imgSrc}}" ng-click="changeImage($index);" /></a>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid p0" id="map" style="height:100%">
+           
+            <div class="nextb" ng-show="currentPage=='menu'" ng-click="nextPage()"><span><i class="ion-plus" style="position: absolute;bottom: -10px;right: 24px;"></i></span></div>
+            <div class="prevb" ng-click="backPage()" ng-hide="currentPage=='menu'"><span><i class="ion-chevron-left" style="position: absolute;bottom: -10px;left: 22px;"></i></span></div>
+            <div class="nextb" ng-click="nextPage()" ng-hide="currentPage=='menu'" ng-show="notSelectedEvent"><span><i class="ion-chevron-right" style="position: absolute;bottom: -10px;right: 24px;"></i></span></div>
 
-      </div>
- 
+        </div>
 
-</ion-content>
 
-<div class="nextb" ui-sref="location"><span><i class="ion-plus" style="position: absolute;bottom: -10px;right: 24px;"></i></span></div>
+    </ion-content>
 
-</ion-view>
+   </ion-view>

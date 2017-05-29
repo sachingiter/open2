@@ -3,10 +3,30 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic', 'menu.controllers'])
+var open2 = angular.module('starter', ['ionic','fbservice.factory', 'ngCordova','firebaseservices.factory','ion-google-autocomplete', 'mapservices.factory', 'firebase']);
 
-.run(function ($ionicPlatform) {
+open2.run(function ($ionicPlatform,  $cordovaGeolocation) {
+    var config = {
+        apiKey: "AIzaSyDRCV9GSpYNm4Odlwbm1Us1g86safXCMLg",               // Your Firebase API key
+        authDomain: "open2-133c3.firebaseio.com",       // Your Firebase Auth domain ("*.firebaseapp.com")
+        databaseURL: "https://open2-133c3.firebaseio.com/"     // Your Firebase Database URL ("https://*.firebaseio.com")
+        //   storageBucket: "<STORAGE_BUCKET>"  // Your Cloud Storage for Firebase bucket ("*.appspot.com")
+    };
+    firebase.initializeApp(config);
     $ionicPlatform.ready(function () {
+
+         document.addEventListener("deviceready", function () {
+            $cordovaGeolocation
+       .getCurrentPosition({ timeout: 3000, enableHighAccuracy: false })
+       .then(function (position) {
+
+       }, function (err) {
+           // error
+       });
+
+        }, false);
+
+         
         if (window.cordova && window.cordova.plugins.Keyboard) {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
             // for form inputs)
@@ -21,7 +41,8 @@ angular.module('starter', ['ionic', 'menu.controllers'])
             StatusBar.styleDefault();
         }
     });
-}).config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+});
+open2.config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
     $stateProvider
 
@@ -40,8 +61,7 @@ angular.module('starter', ['ionic', 'menu.controllers'])
 
     .state('menu1', {
         url: '/menu1',
-        templateUrl: 'templates/menu1.html',
-        controller: 'menu1Ctrl'
+        templateUrl: 'templates/menu1.html'
 
     })
 
@@ -94,8 +114,8 @@ angular.module('starter', ['ionic', 'menu.controllers'])
     })
     .state('picture', {
         url: '/picture',
-        templateUrl: 'templates/picture.html'
-
+        templateUrl: 'templates/picture.html',
+        controller: 'pictureCtrl'
 
     })
     .state('popup1', {
