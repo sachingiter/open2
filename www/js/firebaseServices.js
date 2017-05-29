@@ -1,5 +1,5 @@
 ﻿//Generic service for calling API
-angular.module('firebaseservices.factory', []).factory('firebaseservices', ['$q', '$firebaseAuth', '$ionicLoading', 'firebase', '$firebaseArray', '$firebaseObject', function ($q, $firebaseAuth, $ionicLoading, firebase, $firebaseArray, $firebaseObject) {
+angular.module('firebaseservices.factory', []).factory('firebaseservices', ['$q', '$firebaseAuth', '$ionicLoading', '$firebaseArray', '$firebaseObject', function ($q, $firebaseAuth, $ionicLoading, $firebaseArray, $firebaseObject) {
 
     var task = [];
     var firebaseRef = firebase.database().ref();
