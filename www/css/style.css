@@ -117,7 +117,7 @@ body .navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover 
 .addb{ position:fixed; bottom:0; right:0; width:100px;}
 .addb img{ width:100%;}
 .prevb{ position:fixed; width:100px; height:100px; line-height:100px; background-image:url(../img/backbutton.png); background-size:100% 100%; left:0; bottom:0; font-size:45px; color:white; padding:25px 25px 0px 10px;cursor:pointer}
-.nextb{ position:fixed; width:100px; height:100px; line-height:100px; background-image:url(../img/next.png); background-size:100% 100%;right:0; bottom:0;font-size:45px; color:white;padding:25px 2px 0px 23px; text-align:center;cursor:pointer}
+.nextb{ position:fixed; width:100px; height:100px; line-height:100px; background-image:url(../img/next.png); background-size:100% 100%;right:0; bottom:0;font-size:45px; color:white;padding:25px 2px 0px 23px; text-align:center;cursor:pointer;}
 .skip{ position:fixed; width:100px; height:100px; line-height:100px; background-image:url(../img/skip.png); background-size:100% 100%;right:0; bottom:0;font-size:24px; color:white;padding:5px 2px 0px 23px; text-align:center; cursor:pointer;    font-weight: 600;}
 
 .heading{ background-image:url(../img/menu-b.png);border-bottom-left-radius:40%;
@@ -254,9 +254,43 @@ body.gray{ background-color:#D8D8D8;}
     width: 300px;
     background-color:white;
 }
-
+.img_round1{
+   border-radius: 50%;
+    padding: 6px;
+    background: white;
+    position: absolute;
+    top: -81px;
+    left: 90px;
+    width: 95px;
+}
+.img_round2{
+    border-radius: 50%;
+    padding: 6px;
+    background: white;
+    position: absolute;
+    top: -58px;
+    left: -20px;
+    width:140px
+}
+.opaque_img{
+    opacity:0.2;
+}
+.share{
+    width: 65px;
+    position: absolute;
+    z-index: 9999999;
+    top: 0;
+    right: 0px;
+}
 .modal-dialog{ width:320px;}
-.cre{ float:right; width:30px; margin-top:30px;}
+.cre{ float: right;
+    width: 30px;
+    /* margin-bottom: 0px; */
+    /* left: 28px; */
+    position: absolute;
+    /* float: right; */
+    right: 0px;
+    top: -8px;}
 .cre img{ width:100%;}
 .drop-btn {
     background-image: url("../img/drop.png");

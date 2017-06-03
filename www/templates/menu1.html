@@ -1,47 +1,37 @@
 <ion-view>
     <ion-header-bar align-title="center" class="bar-clear" style="height:80px;padding:0px">
-         
+
         <div class="header-cls" style="text-align:center;width: 100vw;height:80px">
             <div class="buttons navicon-btn">
-                <button class="button-icon ion-navicon" style="color:white" ng-click="openModal()"></button>
+                <button class="button-icon ion-navicon" style="color:white" open-modal></button>
             </div>
-        <img src="img/o2-logo-app-icon.png" width="70"/>
-        <a class="pull-right ws" href="#"><img src="img/share.png" width="10%"/></a>
+            <img src="img/o2-logo-app-icon.png" width="70" />
+           
         </div>
-        
+        <a class="pull-right ws" href="#"><img class="share" src="img/share.png" /></a>
 
 
     </ion-header-bar>
-<ion-content>
-<div class="container-fluid p0" id="map">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d10499.764820534638!2d2.3511447386584425!3d48.85933153586589!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e03cdce4ae9%3A0x38cfa580446f9e46!2sLe+Marais%2C+Paris%2C+France!5e0!3m2!1sen!2sin!4v1494480986783" width="100%" height="400" frameborder="0" style="border:0" allowfullscreen></iframe>
+    <ion-content style="top:52px;bottom:65px">
+        <div class="container-fluid p0" id="menu1" style="height:100%;position:relative;">
+           
 
-      </div>
- 
-<!-- <div class="container-fluid p0">
-<div class="f-text text-center"><p>Experince Details</p></div> -->
-</ion-content>
-
-<!-- <div class="container-fluid p0">
-<div class="f-text text-center"><p>Experince Details</p></div>
-
-<div class="footer-ex">
-<div class="f-center">
-<ul>
-<li><a href="#" ><img src="img/exit.png" width="60" /></a></li><li><a href="#"><img src="img/strobe.png" width="10" /></a></li><li><a href="#"><img src="img/users.png" width="10" /></a></li><li><a href="#"><img src="img/strobe.png" width="10" /></a></li></a></li>
-
-</ul>
-
-</div>
+        </div>
 
 
-</div> -->
-
-
-
-
-
-
-
+    </ion-content>
+    <div class="bar bar-footer" style="height: 80px;border-top-width: 0px;
+    border-bottom-width: 0;background-position: bottom; background-color:transparent;   padding: 0px;">
+      <!--  <img src="img/footerwhite.png" />-->
+    
+        <div class="row text-center" style="background-image: url(img/footerbg.png);
+    max-height: 80px;
+    background-size: cover;border:none">
+            <div class="col col-25" ng-click="openModal()" ng-class="(isShown1)?'opaque_img':'abc'">  <img src="img/exit.png" width="80" /></div>
+            <div class="col col-25" ng-class="(isShown1)?'opaque_img':'abc'">  <img src="img/message.png" width="80" /></div>
+            <div class="col col-25" ng-class="(isShown1)?'opaque_img':'abc'">  <img src="img/users.png" width="80" /></div>
+            <div class="col col-25" ng-class="(isShown1)?'opaque_img':'abc'">  <img src="img/strobe.png" width="80" /></div>
+        </div>
+    </div>
 
 </ion-view>

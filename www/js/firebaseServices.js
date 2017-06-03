@@ -1,9 +1,9 @@
 ﻿//Generic service for calling API
-angular.module('firebaseservices.factory', []).factory('firebaseservices', ['$q', '$firebaseAuth', '$ionicLoading', '$firebaseArray', '$firebaseObject', function ($q, $firebaseAuth, $ionicLoading, $firebaseArray, $firebaseObject) {
+angular.module('firebaseservices.factory', []).factory('firebaseservices', ['$q', '$firebaseAuth', '$ionicLoading', '$firebaseArray', '$firebaseObject', 'mapservices', function ($q, $firebaseAuth, $ionicLoading, $firebaseArray, $firebaseObject, mapservices) {
 
-    var task = [];
+    var events = [];
     var firebaseRef = firebase.database().ref();
-    var geoFire = new GeoFire(firebaseRef.child('taskLocation/'));
+    var geoFire = new GeoFire(firebaseRef.child('EventsLocation/'));
     var geoQuery;
 
     function addUserIfNotExistInfoToDb(userId, email, name, photo) {
@@ -71,18 +71,19 @@ angular.module('firebaseservices.factory', []).factory('firebaseservices', ['$q'
             var messagesRef = firebaseRef.child(node);
 
             var list = $firebaseArray(messagesRef);
-            console.log(data);
+            //console.log(data);
             // add an item
+           // firebaseRef.child(node).push(data)
             list.$add(data).then(function (suc) {
                 console.log(suc);
                 //var ref1 = firebaseRef.child('taskLocation');
                 //var geoFire = new GeoFire(ref1);
-                if (data.Address != 'virtual') {
+               // if (data.Address != 'virtual') {
                 geoFire.set(suc.key, [data.Latitude, data.Longitude]).then(function () {
                     // console.log("Provided key has been added to GeoFire");
-                    list = $firebaseArray(firebaseRef.child('Users/' + localStorage.getItem('UserId') + "/CreatedTasks"));
+                    list = $firebaseArray(firebaseRef.child('Users/' + localStorage.getItem('UserId') + "/CreatedEvents"));
                     console.log(list)
-                    list.$add({ CreatedTaskId: suc.key });
+                    list.$add({ CreatedEventId: suc.key });
                     // messagesRef = firebaseRef.child('Users/' + localStorage.getItem('UserId')+"/CreatedTask").set({
                     // [suc.key]: {Conversations:true}
                     //});
@@ -92,11 +93,11 @@ angular.module('firebaseservices.factory', []).factory('firebaseservices', ['$q'
                     console.log("Error: " + error);
                 })
 
-                } else {
-                    list = $firebaseArray(firebaseRef.child('Users/' + localStorage.getItem('UserId') + "/CreatedTasks"));
-                    console.log(list)
-                    list.$add({ CreatedTaskId: suc.key });
-                }
+               // } else {
+                 //   list = $firebaseArray(firebaseRef.child('Users/' + localStorage.getItem('UserId') + "/CreatedTasks"));
+                    //console.log(list)
+                   // list.$add({ CreatedTaskId: suc.key });
+               // }
                 deferred.resolve(list);
             }, function (er) {
                 deferred.reject(er)
@@ -242,57 +243,35 @@ angular.module('firebaseservices.factory', []).factory('firebaseservices', ['$q'
         },
         getDataBasedOnLocation: function (center, radius) {
             //   var deferred = $q.defer();
-            //  var firebaseRef = firebase.database().ref();
-            //  var geoFire = new GeoFire(firebaseRef.child('taskLocation/'));
+            
             geoQuery = geoFire.query({
                 center: center,
                 radius: radius
             });
 
-            firebaseRef.child('Tasks').orderByChild('Address').equalTo('virtual').on("child_added", function (data) {
-                var dat = data.val();
-                dat.$id = data.key;
-                task.push(dat);
-             
-            });
-            var onKeyEnteredRegistration = geoQuery.on("key_entered", function (key, location, distance) {
+         
+           geoQuery.on("key_entered", function (key, location, distance) {
                 console.log(key + " entered query at " + location + " (" + distance + " km from center)");
-                // ref = firebase.database().ref('Tasks/' + key);
-                //  var firebaseRef1 =   firebaseObj = firebaseRef.child('Tasks/' + key).orderyByChild('Status').equalTo('initiated');;
-                firebaseObj = firebaseRef.child('Tasks/' + key);
+                firebaseObj = firebaseRef.child('Events/' + key);
                 var obj = $firebaseObject(firebaseObj)
-                console.log(obj);
-                obj.$loaded(
-  function (data) {
-      console.log(data === obj); // true
-      console.log(data)
-      //  deferred.resolve(data)
-  },
-  function (error) {
-      // deferred.reject(error);
-      console.error("Error:", error);
-  }
-);
-                //    deferred.resolve(data)
-                task.push(obj)
+                obj.$loaded(function (res) {
+                    console.log("++++++++++++++++++++++=keyentered+++++++++++++++=");
+                    console.log(res);
+                    mapservices.addMarker('map', { lat: res.Latitude, lng: res.Longitude }, 'Open2', res.photoUrl)
+                }, function () { })
+               // events.push(obj)
             });
-            var onKeyExitedRegistration = geoQuery.on("key_exited", function (key, location, distance) {
+          geoQuery.on("key_exited", function (key, location, distance) {
                 console.log(key + " exited query to " + location + " (" + distance + " km from center)");
-                console.log(task)
-                angular.forEach(task, function (i, j) {
+              //  console.log(task)
+                angular.forEach(events, function (i, j) {
                     if (i.$id == key) {
-                        task.splice(j, 1);
+                        events.splice(j, 1);
                     }
                 })
-                //task.map((i, j) =>{
-                //    if (i.$id == key) {
-                //        task.splice(j, 1);
-                //    }
-
-                //})
 
             });
-            return task;
+            return events;
         },
         locationFilter: function (radius) {
             console.log(radius);

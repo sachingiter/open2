@@ -61,8 +61,8 @@ open2.config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider)
 
     .state('menu1', {
         url: '/menu1',
-        templateUrl: 'templates/menu1.html'
-
+        templateUrl: 'templates/menu1.html',
+        controller: 'menu1Ctrl'
     })
 
     .state('notification', {

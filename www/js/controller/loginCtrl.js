@@ -1,4 +1,4 @@
-open2.controller('loginCtrl', function ($scope, $rootScope, $http, $state, fbservice, firebaseservices, $ionicLoading) {
+open2.controller('loginCtrl', function ($scope, $rootScope, $http, $state, fbservice, firebaseservices, $ionicLoading, $ionicBackdrop) {
 
   // $scope.user = {};
   // $scope.user.mail = "prash_jain92@mailinator.com";
@@ -64,16 +64,17 @@ open2.controller('loginCtrl', function ($scope, $rootScope, $http, $state, fbser
   // }
 
     $scope.login = function () {
-        $ionicLoading.show({ template: "Facebook login initiated" });
+       // $ionicLoading.show({ template: "Facebook login initiated" });
         try {
-
+            $ionicBackdrop.retain();
             fbservice.fbLogin().then(function (succes) {
-                alert(JSON.stringify(succes));
+                $ionicBackdrop.release();
+               // alert(JSON.stringify(succes));
                 $ionicLoading.show({ template: "Logged in with facebook" });
                 $ionicLoading.show({ template: "Initiating firebase login" });
                 firebaseservices.loginFacebookFirebase(succes).then(function (firebaseUser) {
                     $ionicLoading.hide();
-                    alert(JSON.stringify(firebaseUser));
+                  //  alert(JSON.stringify(firebaseUser));
                     localStorage.setItem('UserId', firebaseUser.uid);
                     localStorage.setItem('UserLoggedIn', 'true');
                     localStorage.setItem('myDetails', JSON.stringify({ email: firebaseUser.email, first_name: firebaseUser.displayName, picture: { data: { url: firebaseUser.photoURL } } }));

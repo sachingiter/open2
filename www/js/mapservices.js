@@ -4,7 +4,7 @@ angular.module('mapservices.factory', []).factory('mapservices', ['$http', '$q',
     function deg2rad(deg) {
         return deg * (Math.PI / 180)
     };
-    var map;
+    var map = {};
     return {
         getLocationName: function (request) {
             var deferred = $q.defer();
@@ -21,13 +21,13 @@ angular.module('mapservices.factory', []).factory('mapservices', ['$http', '$q',
             var defer = $q.defer();
             document.addEventListener("deviceready", function () {
                 var div = document.getElementById(id);
-                if (!angular.isUndefined(map))
+                if (!angular.isUndefined(map[id]))
                 {
-                    map.clear();
+                    map[id].clear();
                 }
                 
                 // Initialize the map view
-                map = plugin.google.maps.Map.getMap(div, {
+                map[id] = plugin.google.maps.Map.getMap(div, {
                     'controls': {
                         'compass': true,
                         'myLocationButton': true, // you can specify this option, but app asks permission when it launches.
@@ -47,16 +47,16 @@ angular.module('mapservices.factory', []).factory('mapservices', ['$http', '$q',
                         'bearing': 50
                     }
                 });
-                map.addEventListener(plugin.google.maps.event.MAP_READY, function () {
+                map[id].addEventListener(plugin.google.maps.event.MAP_READY, function () {
 
 
-                map.addMarker({
-                    position: position, //{ lat: 37.422359, lng: -122.084344 },
-                    title: name,
-                    snippet: "Community",
-                    animation: plugin.google.maps.Animation.BOUNCE
-                }, function (marker) { });
-                defer.resolve(map);
+                //map.addMarker({
+                //    position: position, //{ lat: 37.422359, lng: -122.084344 },
+                //    title: name,
+                //    snippet: "Community",
+                //    animation: plugin.google.maps.Animation.BOUNCE
+                //}, function (marker) { });
+                //defer.resolve(map);
 
                 });
                 // Wait until the map is ready status.
@@ -64,15 +64,17 @@ angular.module('mapservices.factory', []).factory('mapservices', ['$http', '$q',
             }, false);
             return defer.promise;
         },
-        addMarker: function (map1, position, name, markerIcon) {
-            map.addMarker({
+        addMarker: function (id, position, name, markerIcon) {
+           // alert(markerIcon)
+            //console.log(map)
+            map[id].addMarker({
                 position: position, //{ lat: 37.422359, lng: -122.084344 },
                 title: name,
                 snippet: "Open2",
                 animation: plugin.google.maps.Animation.BOUNCE,
-                icon:{
-     url: markerIcon
-  }
+                'icon': {
+                    'url': markerIcon,
+                },
             }, function (marker) { });
 
                 // Show the info window
@@ -128,8 +130,8 @@ angular.module('mapservices.factory', []).factory('mapservices', ['$http', '$q',
 
            
         },
-        mapClikable: function (value) {
-            map.setClickable(value);
+        mapClikable: function (value,id) {
+            map[id].setClickable(value);
         }
     };
 }]);
