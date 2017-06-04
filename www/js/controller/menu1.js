@@ -1,6 +1,5 @@
 
-
-open2.controller('menu1Ctrl', function ($scope, $state, $rootScope, $ionicModal, mapservices) {
+open2.controller('menu1Ctrl', function ($scope, $state, $rootScope, $ionicModal, mapservices, $cordovaSocialSharing, $cordovaFlashlight) {
     $scope.isShown = true;
     $scope.isShown1 = false;
 
@@ -61,5 +60,68 @@ open2.controller('menu1Ctrl', function ($scope, $state, $rootScope, $ionicModal,
         $scope.isShown1 = false
     }
    
+
+    $scope.shareLink = function(){
+    	console.log("Share link");
+    	$cordovaSocialSharing
+    .share("Please install Open2 app", null, null, "https://www.google.co.in/") // Share via native share sheet
+    .then(function(result) {
+      // Success!
+      console.log("result is : " + result);
+    }, function(err) {
+      // An error occured. Show a message to the user
+      console.log("error is : " + err);
+    });
+    }
+
+    $scope.flash = function(){
+         $cordovaFlashlight.available().then(function(availability) {
+        var avail = availability; // is available
+        console.log("Flash available");
+             $cordovaFlashlight.toggle()
+        .then(function (success) { 
+        /* success */ 
+         console.log("toggle success");
+        },
+          function (error) { 
+          /* error */ 
+           console.log("toggle error");
+        });
+      }, function () {
+        // unavailable
+        alert("Flash is not available in your phone.");
+      });
+
+
+  //   $cordovaFlashlight.switchOn()
+  //   .then(
+  //     function (success) {
+  //      /* success */ 
+  //      console.log("switchOn success");
+  //  },
+  //     function (error) { 
+  //     /* error */ 
+  //     console.log("switchOn error");
+  // });
+
+  // $cordovaFlashlight.switchOff()
+  //   .then(
+  //     function (success) {
+  //      /* success */ 
+  //       console.log("switchOff success");
+  //  },
+  //     function (error) {
+  //      /* error */ 
+  //       console.log("switchOff error");
+  //  });
+
+
+
+    }
+
+   
+
+
+
 
 })

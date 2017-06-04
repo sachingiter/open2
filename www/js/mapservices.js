@@ -74,7 +74,7 @@ angular.module('mapservices.factory', []).factory('mapservices', ['$http', '$q',
                 animation: plugin.google.maps.Animation.BOUNCE,
                 'icon': {
                     'url': markerIcon,
-                },
+                }
             }, function (marker) { });
 
                 // Show the info window
@@ -88,7 +88,7 @@ angular.module('mapservices.factory', []).factory('mapservices', ['$http', '$q',
             document.addEventListener("deviceready", function () {
                
                 $cordovaGeolocation
-   .getCurrentPosition({ timeout: 10000, enableHighAccuracy: false })
+   .getCurrentPosition({ timeout: 10000, enableHighAccuracy: true })
    .then(function (position) {
        deferred.resolve(position);
        console.log('success');

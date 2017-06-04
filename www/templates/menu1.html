@@ -2,13 +2,13 @@
     <ion-header-bar align-title="center" class="bar-clear" style="height:80px;padding:0px">
 
         <div class="header-cls" style="text-align:center;width: 100vw;height:80px">
-            <div class="buttons navicon-btn">
+            <div class="buttons navicon-btn" >
                 <button class="button-icon ion-navicon" style="color:white" open-modal></button>
             </div>
             <img src="img/o2-logo-app-icon.png" width="70" />
            
         </div>
-        <a class="pull-right ws" href="#"><img class="share" src="img/share.png" /></a>
+        <a class="pull-right ws" ng-click = "shareLink()" ><img class="share" src="img/share.png" /></a>
 
 
     </ion-header-bar>
@@ -30,7 +30,7 @@
             <div class="col col-25" ng-click="openModal()" ng-class="(isShown1)?'opaque_img':'abc'">  <img src="img/exit.png" width="80" /></div>
             <div class="col col-25" ng-class="(isShown1)?'opaque_img':'abc'">  <img src="img/message.png" width="80" /></div>
             <div class="col col-25" ng-class="(isShown1)?'opaque_img':'abc'">  <img src="img/users.png" width="80" /></div>
-            <div class="col col-25" ng-class="(isShown1)?'opaque_img':'abc'">  <img src="img/strobe.png" width="80" /></div>
+            <div class="col col-25" ng-click="flash()" ng-class="(isShown1)?'opaque_img':'abc'">  <img src="img/strobe.png" width="80" /></div>
         </div>
     </div>
 
