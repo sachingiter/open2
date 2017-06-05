@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 var open2 = angular.module('starter', ['ionic','fbservice.factory', 'ngCordova','firebaseservices.factory','ion-google-autocomplete', 'mapservices.factory', 'firebase']);
 
-open2.run(function ($ionicPlatform,  $cordovaGeolocation) {
+open2.run(function ($ionicPlatform, $cordovaGeolocation, $state) {
     var config = {
         apiKey: "AIzaSyDRCV9GSpYNm4Odlwbm1Us1g86safXCMLg",               // Your Firebase API key
         authDomain: "open2-133c3.firebaseio.com",       // Your Firebase Auth domain ("*.firebaseapp.com")
@@ -14,7 +14,14 @@ open2.run(function ($ionicPlatform,  $cordovaGeolocation) {
     };
     firebase.initializeApp(config);
     $ionicPlatform.ready(function () {
-
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                $state.go("menu");
+                // User is signed in.
+            } else {
+                $state.go('login');
+            }
+        })
          document.addEventListener("deviceready", function () {
             $cordovaGeolocation
        .getCurrentPosition({ timeout: 3000, enableHighAccuracy: false })
@@ -138,7 +145,7 @@ open2.config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider)
 
 
      });
-
-    $urlRouterProvider.otherwise('/login');
+   
+    
 
 });

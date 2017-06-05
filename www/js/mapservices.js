@@ -56,7 +56,7 @@ angular.module('mapservices.factory', []).factory('mapservices', ['$http', '$q',
                 //    snippet: "Community",
                 //    animation: plugin.google.maps.Animation.BOUNCE
                 //}, function (marker) { });
-                //defer.resolve(map);
+                defer.resolve(map);
 
                 });
                 // Wait until the map is ready status.

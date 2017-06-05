@@ -4,7 +4,7 @@
         <div class="modal-content" style="display:flex;height:73vh">
           
             <div class="modal-body" style="align-self:center" >
-                <img src="img/cemra-picture.jpg" class="img_round1" /><img src="img/dummy.gif" class="img_round2" />
+                <img ng-src="{{userInfo.picture.data.url}}"class="img_round1" /><img src="img/cemra-picture.jpg"  class="img_round2" />
                 <div class="cre" ng-show="isShown"><a><img src="img/ic_report.png" ng-click="isShown=!isShown"/></a></div>
                 <div class="mes" style="padding-top :70px;" ng-show="isShown">
                     <p style="text-align: center;font-size: 20px;

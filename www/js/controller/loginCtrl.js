@@ -70,10 +70,11 @@ open2.controller('loginCtrl', function ($scope, $rootScope, $http, $state, fbser
             fbservice.fbLogin().then(function (succes) {
                 $ionicBackdrop.release();
                // alert(JSON.stringify(succes));
-                $ionicLoading.show({ template: "Logged in with facebook" });
-                $ionicLoading.show({ template: "Initiating firebase login" });
+              //  $ionicLoading.show({ template: "Logged in with facebook" });
+               // $ionicLoading.show({ template: "Initiating firebase login" });
                 firebaseservices.loginFacebookFirebase(succes).then(function (firebaseUser) {
-                    $ionicLoading.hide();
+                    // $ionicLoading.hide();
+                    $ionicBackdrop.release();
                   //  alert(JSON.stringify(firebaseUser));
                     localStorage.setItem('UserId', firebaseUser.uid);
                     localStorage.setItem('UserLoggedIn', 'true');

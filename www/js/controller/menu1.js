@@ -2,7 +2,7 @@
 open2.controller('menu1Ctrl', function ($scope, $state, $rootScope, $ionicModal, mapservices, $cordovaSocialSharing, $cordovaFlashlight) {
     $scope.isShown = true;
     $scope.isShown1 = false;
-
+    $scope.userInfo =JSON.parse(localStorage.getItem('myDetails'));
     mapservices.getLatLong().then(function (position) {
         console.log('postioncalled');
         console.log(position);

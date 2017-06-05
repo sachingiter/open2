@@ -1,11 +1,13 @@
 ﻿
-open2.controller('menuCtrl', function ($scope, $rootScope, $http, $state, mapservices, firebaseservices, $ionicModal) {
+open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading, $http,$ionicPlatform, $state, mapservices, firebaseservices, $ionicModal) {
 
     // $scope.user = {};
     // $scope.user.mail = "prash_jain92@mailinator.com";
     // $scope.user.pass = "123456";
-    var myLat = 22.7195690;
-    var myLng = 75.8577260;
+    $ionicPlatform.ready(function () {
+      
+    var myLat = 37.0902;
+    var myLng = 95.7129;
 
 
     //setTimeout(function () {
@@ -22,6 +24,7 @@ open2.controller('menuCtrl', function ($scope, $rootScope, $http, $state, mapser
     }).then(function (modal) {
         $scope.modal = modal;
     });
+    $ionicLoading.show();
     mapservices.getLatLong().then(function (position) {
         console.log('postioncalled');
         console.log(position);
@@ -35,24 +38,17 @@ open2.controller('menuCtrl', function ($scope, $rootScope, $http, $state, mapser
         var request = {
             'position': { "lat": position.coords.latitude, "lng": position.coords.longitude }
         };
+        $scope.createMap(myLat, myLng);
         //firebaseservices.getDataBasedOnLocation([myLat, myLng], 50).then(function (res) {
         //    $scope.events
         //})
         //   $scope.distanceCalculation = mapservices.distanceBetweenTwoLatLong(myLat, myLng, $scope.taskDetails.Latitude, $scope.taskDetails.Longitude, 'mi').toFixed(2);
-        mapservices.createMap('map', { lat: myLat, lng: myLng }, 'abc').then(function (res) {
-            // map = res;
-            //  mapservices.addMarker(res,)
-            
-            mapservices.getLocationName(request).then(function (respo) {
-                $scope.currentLocation = respo.locality + ', ' + respo.adminArea;
-              
-
-            }, function (er) { })
-        }, function (er) {
-
-
-        })
+       
+    }, function (er) {
+        $scope.createMap(myLat, myLng);
     });
+
+      
     //  mapservices.createMap('map', { lat: myLat, lng: myLng })
     // $scope.openModal = function () {
   
@@ -66,7 +62,25 @@ open2.controller('menuCtrl', function ($scope, $rootScope, $http, $state, mapser
     { 'imgSrc': './img/s11.png', 'text': 'Open soccer' }, { 'imgSrc': './img/s12.png', 'text': 'Open coffe or tea' }]
     //$scope.modalData = $ionicModal.fromTemplate('<div class="selectbox"><div class="container text-center selectbox-inside"><div class="row "><center style="    width: 100%;" ><img src="./img/s3.png" style="width: 30%;height: 100px;" /></center></div><div class="row"><p style="     color: grey;   width: 100%;">open dog walk / play</p></div><div class="imgbox"><a href="#"><img src="./img/s1.png"/></a><a href="#"><img src="./img/s2.png"/></a><a href="#"><img src="./img/s3.png"/></a><a ui-sref="selected"><img src="./img/s4.png"/></a><a href="#"><img src="./img/s5.png"/></a><a href="#"><img src="./img/s6.png"/></a><a href="#"><img src="./img/s7.png"/></a><a href="#"><img src="./img/s8.png"/></a><a href="#"><img src="./img/s9.png"/></a><a href="#"><img src="./img/s10.png"/></a><a href="#"><img src="./img/s11.png"/></a><a href="#"><img src="./img/s12.png"/></a></div></div></div>', {
     //    scope: $scope
-    //})
+        //})
+   
+    $scope.createMap = function (myLat, myLng) {
+      
+        mapservices.createMap('map', { lat: myLat, lng: myLng }, 'abc').then(function (res) {
+            // map = res;
+            $ionicLoading.hide();
+            //  mapservices.addMarker(res,)
+
+            mapservices.getLocationName(request).then(function (respo) {
+                $scope.currentLocation = respo.locality + ', ' + respo.adminArea;
+
+
+            }, function (er) { })
+        }, function (er) {
+            $ionicLoading.hide();
+
+        })
+    }
     $scope.notSelectedEvent=true
     $scope.selectedLocation = 'current';
     $scope.eventText = '';
@@ -128,8 +142,9 @@ open2.controller('menuCtrl', function ($scope, $rootScope, $http, $state, mapser
     $scope.notification = function () {
         $state.go('notification');
     }
+    })
 
-}).directive('openModal', function ($ionicModal, mapservices) {
+}).directive('openModal', function ($ionicModal, mapservices, firebase) {
     return {
         restrict: 'A',
         scope:{},
@@ -144,7 +159,13 @@ open2.controller('menuCtrl', function ($scope, $rootScope, $http, $state, mapser
                 scope.modal.show();
             }
 
-
+            scope.logout = function () {
+                firebase.auth().signOut().then(function () {
+                    // Sign-out successful.
+                }, function (error) {
+                    // An error happened.
+                });
+            }
             scope.closeModal = function () {
                 if (!ionic.Platform.isWebView()) {
 
