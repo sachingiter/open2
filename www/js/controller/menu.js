@@ -35,9 +35,7 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading, $http,$
         console.log($scope.events);
         $scope.myLatitude=position.coords.latitude;
         $scope.myLongitude = position.coords.longitude;
-        var request = {
-            'position': { "lat": position.coords.latitude, "lng": position.coords.longitude }
-        };
+       
         $scope.createMap(myLat, myLng);
         //firebaseservices.getDataBasedOnLocation([myLat, myLng], 50).then(function (res) {
         //    $scope.events
@@ -70,7 +68,9 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading, $http,$
             // map = res;
             $ionicLoading.hide();
             //  mapservices.addMarker(res,)
-
+            var request = {
+                'position': { "lat": myLat, "lng": myLng }
+            };
             mapservices.getLocationName(request).then(function (respo) {
                 $scope.currentLocation = respo.locality + ', ' + respo.adminArea;
 
