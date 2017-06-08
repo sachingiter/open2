@@ -70,8 +70,11 @@ open2.controller('loginCtrl', function ($scope, $rootScope, $http, $state, fbser
             fbservice.fbLogin().then(function (succes) {
                 $ionicBackdrop.release();
                // alert(JSON.stringify(succes));
-                $ionicLoading.show({ template: "Logged in with facebook" });
-                $ionicLoading.show({ template: "Initiating firebase login" });
+                // $ionicLoading.show({ template: "Logged in with facebook" });
+                $ionicLoading.show(
+                  {
+                     template: '<ion-spinner icon="circles" class="spinner-calm"></ion-spinner>'
+                });
                 firebaseservices.loginFacebookFirebase(succes).then(function (firebaseUser) {
                     $ionicLoading.hide();
                   //  alert(JSON.stringify(firebaseUser));
@@ -81,8 +84,8 @@ open2.controller('loginCtrl', function ($scope, $rootScope, $http, $state, fbser
                     // alert(JSON.stringify(success));
                     $state.go("menu");
                 }, function (er) {
-                    alert(JSON.stringify(er));
-                    alert('error in firebase login')
+                    // alert(JSON.stringify(er));
+                    alert('Error in firebase login')
 
                 })
                 //}, function (er) {
@@ -93,9 +96,9 @@ open2.controller('loginCtrl', function ($scope, $rootScope, $http, $state, fbser
                 //})
 
             }, function (fail) {
-                alert('error ocurred while facebook login initiated')
-                alert(JSON.stringify(fail));
-                alert(fail);
+                alert('Error ocurred while facebook login initiated')
+                // alert(JSON.stringify(fail));
+                // alert(fail);
             })
         } catch (er) {
 

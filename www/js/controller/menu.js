@@ -13,7 +13,6 @@ open2.controller('menuCtrl', function ($scope, $rootScope, $http, $state, mapser
     //    d.className += " has-header";
     //}, 2000)
     
-
     $scope.currentPageIndex = 0;
     $scope.pages = ['menu','location','chooseEvents'];
     $scope.currentPage = 'menu';
@@ -39,19 +38,24 @@ open2.controller('menuCtrl', function ($scope, $rootScope, $http, $state, mapser
         //    $scope.events
         //})
         //   $scope.distanceCalculation = mapservices.distanceBetweenTwoLatLong(myLat, myLng, $scope.taskDetails.Latitude, $scope.taskDetails.Longitude, 'mi').toFixed(2);
+        console.log("createMap createMap : ");
         mapservices.createMap('map', { lat: myLat, lng: myLng }, 'abc').then(function (res) {
             // map = res;
             //  mapservices.addMarker(res,)
-            
-            mapservices.getLocationName(request).then(function (respo) {
-                $scope.currentLocation = respo.locality + ', ' + respo.adminArea;
-              
 
-            }, function (er) { })
         }, function (er) {
 
 
-        })
+        });
+
+         mapservices.getLocationName(request).then(function (respo) {
+
+               $scope.currentLocation = respo.thoroughfare + ', ' + respo.locality + ', ' + respo.adminArea;
+               console.log("Current Location : " + $scope.currentLocation);
+
+            }, function (er) { });
+
+
     });
     //  mapservices.createMap('map', { lat: myLat, lng: myLng })
     // $scope.openModal = function () {
@@ -87,10 +91,14 @@ open2.controller('menuCtrl', function ($scope, $rootScope, $http, $state, mapser
       //  mapservices.mapClikable(false)
         $scope.currentPage = $scope.pages[$scope.currentPageIndex];
         if ($scope.currentPageIndex == 2) {
+            console.log("adfasdfsdf 2");
+            mapservices.mapClikable(true,'map');
             $scope.notSelectedEvent = false;
 
         }
         if ($scope.currentPageIndex == 3) {
+            console.log("adfasdfsdf 3");
+            mapservices.mapClikable(true,'map');
             $scope.currentPageIndex--;
             $scope.currentPage=$scope.pages[$scope.currentPageIndex]
             $state.go('picture');
@@ -101,6 +109,8 @@ open2.controller('menuCtrl', function ($scope, $rootScope, $http, $state, mapser
             
         }
         if ($scope.currentPageIndex == 1) {
+            console.log("adfasdfsdf 1");
+            mapservices.mapClikable(false,'map');
             mapservices.addMarker('map', { lat: $scope.myLatitude, lng: $scope.myLongitude }, 'Open2', './img/destinationpin.png');
         }
     }
@@ -129,7 +139,7 @@ open2.controller('menuCtrl', function ($scope, $rootScope, $http, $state, mapser
         $state.go('notification');
     }
 
-}).directive('openModal', function ($ionicModal, mapservices) {
+}).directive('openModal', function ($ionicModal, mapservices, firebase) {
     return {
         restrict: 'A',
         scope:{},
@@ -144,12 +154,25 @@ open2.controller('menuCtrl', function ($scope, $rootScope, $http, $state, mapser
                 scope.modal.show();
             }
 
+            scope.logout = function () {
+                firebase.auth().signOut().then(function () {
+                    // Sign-out successful.
+                     // scope.currentPageIndex = 0;
+                     scope.closeModal();
+                }, function (error) {
+                    // An error happened.
+                });
+            }
+
+
+
 
             scope.closeModal = function () {
                 if (!ionic.Platform.isWebView()) {
+                    console.log("is not WebView");
 
                 } else {
-
+                    console.log("is WebView");
                     mapservices.mapClikable(true,'map')
                 }
                 scope.modal.hide();

@@ -11,7 +11,7 @@ angular.module('mapservices.factory', []).factory('mapservices', ['$http', '$q',
            
             plugin.google.maps.Geocoder.geocode(request, function (results) {
                 deferred.resolve(results[0])
-                console.log(results[0]);
+                console.log("Location *********** :: " + JSON.stringify(results[0]));
               
             }, function (er) {deferred.reject(er) });
             return deferred.promise;
@@ -20,6 +20,7 @@ angular.module('mapservices.factory', []).factory('mapservices', ['$http', '$q',
             
             var defer = $q.defer();
             document.addEventListener("deviceready", function () {
+                console.log("inside createMap");
                 var div = document.getElementById(id);
                 if (!angular.isUndefined(map[id]))
                 {
@@ -86,9 +87,9 @@ angular.module('mapservices.factory', []).factory('mapservices', ['$http', '$q',
         getLatLong: function () {
             var deferred = $q.defer();
             document.addEventListener("deviceready", function () {
-               
+               var option = { timeout: 10000, enableHighAccuracy: false, maximumAge: 0};
                 $cordovaGeolocation
-   .getCurrentPosition({ timeout: 10000, enableHighAccuracy: true })
+   .getCurrentPosition(option)
    .then(function (position) {
        deferred.resolve(position);
        console.log('success');
@@ -131,7 +132,10 @@ angular.module('mapservices.factory', []).factory('mapservices', ['$http', '$q',
            
         },
         mapClikable: function (value,id) {
-            map[id].setClickable(value);
+            if(map[id] != undefined){
+                map[id].setClickable(value);    
+            }
+            
         }
     };
 }]);

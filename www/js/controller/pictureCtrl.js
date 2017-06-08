@@ -35,13 +35,13 @@ open2.controller('pictureCtrl', function ($scope, $rootScope, $http, $state, $co
       quality: 100,
       destinationType: Camera.DestinationType.DATA_URL,
       sourceType: Camera.PictureSourceType.CAMERA,
-      allowEdit: true,
       encodingType: Camera.EncodingType.JPEG,
-      targetWidth: 100,
-      targetHeight: 100,
+      allowEdit: true,
+      targetWidth: 200,
+      targetHeight: 200,
       popoverOptions: CameraPopoverOptions,
       saveToPhotoAlbum: false,
-    correctOrientation:true
+      correctOrientation:true
     };
 
     $cordovaCamera.getPicture(options).then(function(imageData) {
@@ -53,5 +53,10 @@ open2.controller('pictureCtrl', function ($scope, $rootScope, $http, $state, $co
     }
 
   $scope.init();
+
+  $scope.menu1 = function(){
+    $scope.imageURL = null;
+    $state.go('menu1');
+  }
 
 });

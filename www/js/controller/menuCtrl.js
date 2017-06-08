@@ -15,6 +15,17 @@ open2.controller('menuCtrl', function ($scope, $rootScope, $http, $state, mapser
         mapservices.createMap('map', { lat: myLat, lng: myLng }, 'abc').then(function (res) {
             // map = res;
             //  mapservices.addMarker(res,)
+
+            console.log("createMap createMap : " + $scope.currentLocation);
+            
+            mapservices.getLocationName(request).then(function (respo) {
+
+               $scope.currentLocation = respo.locality + ', ' + respo.adminArea;
+               console.log("Current Location : " + $scope.currentLocation);
+
+            }, function (er) { })
+
+            
         }, function (er) {
 
 
