@@ -5,7 +5,7 @@ angular.module('firebaseservices.factory', []).factory('firebaseservices', ['$q'
     var firebaseRef = firebase.database().ref();
     var geoFire = new GeoFire(firebaseRef.child('EventsLocation/'));
     var geoQuery;
-
+    var data = [];
     function addUserIfNotExistInfoToDb(userId, email, name, photo) {
         // var registerd = true;
         console.log('userId    ' + userId);
@@ -242,7 +242,7 @@ angular.module('firebaseservices.factory', []).factory('firebaseservices', ['$q'
             return defer.promise;
         },
         getDataBasedOnLocation: function (center, radius) {
-            //   var deferred = $q.defer();
+               var deferred = $q.defer();
             
             geoQuery = geoFire.query({
                 center: center,
@@ -255,11 +255,16 @@ angular.module('firebaseservices.factory', []).factory('firebaseservices', ['$q'
                 firebaseObj = firebaseRef.child('Events/' + key);
                 var obj = $firebaseObject(firebaseObj)
                 obj.$loaded(function (res) {
-                    console.log("++++++++++++++++++++++=keyentered+++++++++++++++=");
-                    console.log(res);
-                    mapservices.addMarker('map', { lat: res.Latitude, lng: res.Longitude }, 'Open2', res.photoUrl)
-                }, function () { })
+                   // console.log("++++++++++++++++++++++=keyentered+++++++++++++++=");
+                    //console.log(res);
+                    events.push(res);
+                    deferred.resolve(events);
+                    
+                }, function () {
+
+                })
                // events.push(obj)
+                return deferred.promise;
             });
           geoQuery.on("key_exited", function (key, location, distance) {
                 console.log(key + " exited query to " + location + " (" + distance + " km from center)");
@@ -269,9 +274,9 @@ angular.module('firebaseservices.factory', []).factory('firebaseservices', ['$q'
                         events.splice(j, 1);
                     }
                 })
-
+                deferred.resolve(events);
             });
-            return events;
+            return deferred.promise;
         },
         locationFilter: function (radius) {
             console.log(radius);
@@ -388,7 +393,7 @@ function (error) {
             firebaseRef.child(node).orderByChild(orderBy).equalTo(condition).on("child_added", function (dat) {
                 //console.log(data.val());
                 var result = dat.val();
-                result.CreatedTaskId = dat.key;
+                result.key = dat.key;
                 data.push(result);
                 defer.resolve(data);
                 console.log(dat.key);

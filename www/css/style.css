@@ -272,6 +272,34 @@ body.gray{ background-color:#D8D8D8;}
     left: -20px;
     width:140px
 }
+.user-height{
+    height: 300px;
+   
+}
+.time-left{
+    position: absolute;
+    right: 18px;
+    bottom: 95px;
+    color: gray;
+}
+.usr-outer{
+     border: 1px solid #ddd;
+}
+.join-btn{
+    float: right;
+    border-radius: 0px;
+    margin-top: 20px;
+}
+.modal-body1{
+    border: 10px solid #29E5EE;
+    /* border-radius: 50%; */
+    height: 372px;
+    margin: 0 auto;
+    padding: 10px;
+    position: relative;
+    width: 300px;
+    background-color: white;
+}
 .opaque_img{
     opacity:0.2;
 }

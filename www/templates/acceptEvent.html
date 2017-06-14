@@ -1,17 +1,17 @@
-<ion-view style="background-color:transparent">
+﻿<ion-view style="background-color:transparent">
 
     <ion-content style="top:100px">
         <div class="modal-content" style="display:flex;height:73vh">
-          
-            <div class="modal-body" style="align-self:center" >
-                <img src="img/dummy.gif"class="img_round1" /><img src="img/cemra-picture.jpg"  class="img_round2" />
-                <div class="cre" ng-show="isShown"><a><img src="img/ic_report.png" ng-click="isShown=!isShown"/></a></div>
+
+            <div class="modal-body" style="align-self:center">
+                <img src="img/dummy.gif" class="img_round1" /><img src="img/cemra-picture.jpg" class="img_round2" />
+                <div class="cre" ng-show="isShown"><a><img src="img/ic_report.png" ng-click="isShown=!isShown" /></a></div>
                 <div class="mes" style="padding-top :70px;" ng-show="isShown">
                     <p style="text-align: center;font-size: 20px;
-    color: grey;">Do you want to drop out of open dog walk / play?</p><center style="width: 100%;"><img src="img/dog.jpg" /></center>
+    color: grey;">Sarah (120m),<br />is open 2 a dog walk/play</p><center style="width: 100%;"><img src="img/dog.jpg" /></center><span class="time-left">19 min ago.</span>
                 </div>
-                <div class="drop-btn" ng-show="isShown"><p>Drop Out</p></div>
-              
+                <div class="drop-btn" ng-show="isShown" ng-click="joinEvent()"><p>Join Now</p></div>
+
 
 
                 <div class="mes" style="margin-top: 50px;padding-bottom:30px;padding-left: 16px;padding-right: 16px;" ng-show="!isShown">
@@ -21,10 +21,10 @@
                 <div class="drop-btn1" ng-show="!isShown"><p>Report</p></div>
                 <a><img src="img/back.png" ng-click="closeModal()" style="position: absolute;/* height: 10px; */left: -20px;" /></a>
             </div>
-           
-           
+
+
         </div>
-      
+
 
 
 

@@ -4,7 +4,7 @@ angular.module('mapservices.factory', []).factory('mapservices', ['$http', '$q',
     function deg2rad(deg) {
         return deg * (Math.PI / 180)
     };
-    var map = {};
+   
     return {
         getLocationName: function (request) {
             var deferred = $q.defer();
@@ -21,13 +21,13 @@ angular.module('mapservices.factory', []).factory('mapservices', ['$http', '$q',
             var defer = $q.defer();
             document.addEventListener("deviceready", function () {
                 var div = document.getElementById(id);
-                if (!angular.isUndefined(map[id]))
+                if (!angular.isUndefined(map))
                 {
-                    map[id].clear();
+                    map.clear();
                 }
                 
                 // Initialize the map view
-                map[id] = plugin.google.maps.Map.getMap(div, {
+                map = plugin.google.maps.Map.getMap(div, {
                     'controls': {
                         'compass': true,
                         'myLocationButton': true, // you can specify this option, but app asks permission when it launches.
@@ -47,7 +47,7 @@ angular.module('mapservices.factory', []).factory('mapservices', ['$http', '$q',
                         'bearing': 50
                     }
                 });
-                map[id].addEventListener(plugin.google.maps.event.MAP_READY, function () {
+                map.addEventListener(plugin.google.maps.event.MAP_READY, function () {
 
 
                 //map.addMarker({
@@ -67,21 +67,30 @@ angular.module('mapservices.factory', []).factory('mapservices', ['$http', '$q',
         addMarker: function (id, position, name, markerIcon) {
            // alert(markerIcon)
             //console.log(map)
-            map[id].addMarker({
+            map.addMarker({
                 position: position, //{ lat: 37.422359, lng: -122.084344 },
                 title: name,
                 snippet: "Open2",
+                markerName: markerIcon,
                 animation: plugin.google.maps.Animation.BOUNCE,
                 'icon': {
                     'url': markerIcon,
                 }
-            }, function (marker) { });
-
+            }, function (marker) {
+                marker.addEventListener(plugin.google.maps.event.MARKER_CLICK, function () {
+                    //alert("Marker is clicked");
+                 console.log(marker.get("markerName"))
+                });
+            });
+            
                 // Show the info window
                 //marker.showInfoWindow();
 
                 // Catch the click event
                
+        },
+        returnObj: function () {
+            return map;
         },
         getLatLong: function () {
             var deferred = $q.defer();
@@ -131,7 +140,7 @@ angular.module('mapservices.factory', []).factory('mapservices', ['$http', '$q',
            
         },
         mapClikable: function (value,id) {
-            map[id].setClickable(value);
+            map.setClickable(value);
         }
     };
 }]);

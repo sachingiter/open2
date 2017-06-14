@@ -3,9 +3,10 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
+ 
 var open2 = angular.module('starter', ['ionic','fbservice.factory', 'ngCordova','firebaseservices.factory','ion-google-autocomplete', 'mapservices.factory', 'firebase']);
 
-open2.run(function ($ionicPlatform, $cordovaGeolocation, $state) {
+open2.run(function ($ionicPlatform, $cordovaGeolocation, $state, $firebaseAuth) {
     var config = {
         apiKey: "AIzaSyDRCV9GSpYNm4Odlwbm1Us1g86safXCMLg",               // Your Firebase API key
         authDomain: "open2-133c3.firebaseio.com",       // Your Firebase Auth domain ("*.firebaseapp.com")
@@ -14,6 +15,48 @@ open2.run(function ($ionicPlatform, $cordovaGeolocation, $state) {
     };
     firebase.initializeApp(config);
     $ionicPlatform.ready(function () {
+        if (!ionic.Platform.isWebView()) {
+            console.log('webview');
+            var authObj = $firebaseAuth();
+            var firebaseRef = firebase.database().ref();
+            authObj.$signInWithEmailAndPassword("sachin.p@mailinator.com", "123456789").then(function (firebaseUser) {
+                console.log("Signed in as:", firebaseUser.uid);
+                localStorage.setItem('UserId', firebaseUser.uid);
+                localStorage.setItem('UserLoggedIn', 'true');
+
+                firebaseObj = firebaseRef.child('Users/' + firebaseUser.uid).once('value').then(function (snapshot) {
+                    //var username = snapshot.val().username;
+                    console.log(snapshot.val());
+                    console.log(snapshot.val() === null)
+                    if (snapshot.val() === null) {
+                        firebaseRef.child('Users/' + firebaseUser.uid).set({
+                            AccountStatus: "Active",
+                            AverageRating: "0",
+                            CompletedAppliedTasks: "",
+                            //  CreatedTasks: [{ CreatedTask: true }],
+                            //AppliedTasks: [{ AppliedTask: true }],
+                            CreatedAt: new Date().getTime(),
+                            Email: '',
+                            FlaggedCount: 0,
+                            InvitationDeepLink: 0,
+                            InvitedByUserID: "invitedbyID",
+                            KarmaPoints: 0,
+                            LastLoginAt: "date of lastlogin",
+                            Lat: "",
+                            location: 'indore Mp',
+                            Long: "",
+                            Name: 'Irshad',
+                            PhotoUrl: "file:///android_asset/www/img/greg.png",
+                            Recommendations: "0",
+                            //  SocialLinks: [{links:true}],
+                            UpdatedAt: new Date().getTime()
+                        });
+                    }
+                })
+            }).catch(function (error) {
+                console.error("Authentication failed:", error);
+            });
+        }
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
                 $state.go("menu");
