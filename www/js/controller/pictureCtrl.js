@@ -31,27 +31,19 @@ open2.controller('pictureCtrl', function ($scope, $rootScope, $http, $state, $co
 
     $scope.init = function(){
 
-      var options = {
-      quality: 100,
-      destinationType: Camera.DestinationType.DATA_URL,
-      sourceType: Camera.PictureSourceType.CAMERA,
-     // allowEdit: true,
-      encodingType: Camera.EncodingType.JPEG,
-      targetWidth: 100,
-      targetHeight: 100,
-      popoverOptions: CameraPopoverOptions,
-      saveToPhotoAlbum: false,
-  //  correctOrientation:true
-    };
-
-    $cordovaCamera.getPicture(options).then(function(imageData) {
-      $scope.imageURL = "data:image/jpeg;base64," + imageData;
-    }, function(err) {
-      // error
-    });
-
+        CameraPreview.startCamera({ x: 40, y: 80, width: 300, height: 300, camera: CameraPreview.CAMERA_DIRECTION.BACK, toBack: false, previewDrag: false, tapPhoto: true });
     }
+   
+    $scope.takePicture = function () {
+        CameraPreview.takePicture({ width: 300, height: 300, quality: 85 }, function (imgData) {
+            $scope.imageURL = 'data:image/jpeg;base64,' + imgData[0];
 
+
+            CameraPreview.hide();
+
+
+        });
+    }
   $scope.init();
 
 });

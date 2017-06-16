@@ -13,16 +13,16 @@
     </ion-header-bar>
     <ion-content style="top:100px">
         <div class="list lst-nav">
-            <div class="item" ng-click="modal.hide()">
+            <div class="item" ng-click="map.setClickable(true);modal.hide()">
                 Invite friends
             </div>
-            <div class="item" ui-sref="notification" ng-click="modal.hide()" >
+            <div class="item" ui-sref="notification" ng-click="map.setClickable(true);modal.hide()" >
                 Notification
             </div>
-            <div class="item" ui-sref="appfeedback"  ng-click="modal.hide()" >
+            <div class="item" ui-sref="appfeedback"  ng-click="map.setClickable(true);modal.hide()" >
                 App Feedback
             </div>
-            <div class="item" ui-sref="approve" ng-click="modal.hide()" >
+            <div class="item" ui-sref="approve" ng-click="map.setClickable(true);modal.hide()" >
                 Approve Open2ers
             </div>
         </div>

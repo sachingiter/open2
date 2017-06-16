@@ -14,6 +14,7 @@ open2.run(function ($ionicPlatform, $cordovaGeolocation, $state, $firebaseAuth) 
         //   storageBucket: "<STORAGE_BUCKET>"  // Your Cloud Storage for Firebase bucket ("*.appspot.com")
     };
     firebase.initializeApp(config);
+    
     $ionicPlatform.ready(function () {
         if (!ionic.Platform.isWebView()) {
             console.log('webview');

@@ -1,11 +1,17 @@
 ﻿
-open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase,$firebaseObject, $http,$ionicPlatform, $state,$cordovaSocialSharing,$cordovaFlashlight, mapservices, firebaseservices, $ionicModal) {
+open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase,$firebaseObject,$ionicSlideBoxDelegate, $http,$ionicPlatform, $state,$cordovaSocialSharing,$cordovaFlashlight, mapservices, firebaseservices, $ionicModal) {
 
     // $scope.user = {};
     // $scope.user.mail = "prash_jain92@mailinator.com";
     // $scope.user.pass = "123456";
+
     $scope.isShown = true;
     $scope.isShown1 = false;
+    $scope.backTemplates = true;
+    $scope.profileShow = false;
+    $scope.bg_text = "Experience Details";
+    $scope.backArrow = false;
+    $scope.messageTemplates = ["I'm here!", "Sorry, cant't make it!", "On my way!", "On your way?"];
     $scope.events = [];
     $ionicPlatform.ready(function () {
         var firebaseRef = firebase.database().ref();
@@ -33,7 +39,7 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
                         $scope.currentPage = $scope.pages[$scope.currentPageIndex]
                     }
                     else {
-                        $scope.mapHeight = { "top": "52px", "bottom": "65px" };
+                        $scope.mapHeight = { "top": "52px", "bottom": "107px" };
                         $scope.currentPageIndex = 3;
                         $scope.currentPage = $scope.pages[$scope.currentPageIndex]
                     }
@@ -80,6 +86,7 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
     }
     else {
         $scope.currentPage = 'createdEvents';
+        $ionicSlideBoxDelegate.update()
     }
     mapservices.getLatLong().then(function (position) {
         console.log('postioncalled');
@@ -93,6 +100,18 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
         $scope.myLongitude = position.coords.longitude;
        
         $scope.createMap(myLat, myLng);
+        var request = {
+            'position': { "lat": $scope.myLatitude, "lng": $scope.myLongitude }
+        };
+        mapservices.getLocationName(request).then(function (respo) {
+            console.log(respo);
+            if (respo) {
+            $scope.currentLocation = respo.thoroughfare + ', ' + respo.locality + ', ' + respo.adminArea;
+            } else {
+                $scope.getLocationName(request);
+            }
+        }, function (fail) {
+        })
         //firebaseservices.getDataBasedOnLocation([myLat, myLng], 50).then(function (res) {
         //    $scope.events
         //})
@@ -101,7 +120,19 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
     }, function (er) {
         $scope.createMap(myLat, myLng);
     });
+    $scope.getLocationName = function (request) {
+       
+        mapservices.getLocationName(request).then(function (respo) {
+            if (respo) {
 
+            $scope.currentLocation = respo.thoroughfare + ', ' + respo.locality + ', ' + respo.adminArea;
+            } else {
+                $scope.getLocationName(request);
+            }
+        }, function (fail) {
+        })
+    }
+       
     $scope.createMap = function (lat, lng) {
         document.addEventListener("deviceready", function () {
             var div = document.getElementById('map');
@@ -221,12 +252,14 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
         $scope.currentPage = $scope.pages[$scope.currentPageIndex];
         if ($scope.currentPageIndex == 2) {
             $scope.notSelectedEvent = false;
+            $scope.map.setClickable(true);
 
         }
         if ($scope.currentPageIndex == 3) {
-           // $scope.currentPageIndex--;
+            // $scope.currentPageIndex--;
+            $scope.map.setClickable(true);
             $scope.currentPage = $scope.pages[$scope.currentPageIndex]
-            $scope.mapHeight = { "top": "52px", "bottom": "65px" };
+            $scope.mapHeight = { "top": "52px", "bottom": "107px" };
             $state.go('picture');
             firebaseservices.getDataFromNodeValue('AppConfig/ExpireTime').then(function (suc) {
 
@@ -242,7 +275,10 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
             
         }
         if ($scope.currentPageIndex == 1) {
-            $scope.map.addMarker({ Latitude: $scope.myLatitude, Longitude: $scope.myLongitude, eventDetail: 'location', photoUrl:'./img/destinationpin.png' });
+            $scope.map.setClickable(false);
+            $scope.addMarker({ Latitude: $scope.myLatitude, Longitude: $scope.myLongitude, eventDetail: 'location', photoUrl: './img/destinationpin.png' });
+           
+           
         }
     }
     $scope.openModal = function () {
@@ -278,6 +314,13 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
         $scope.openModalCross = modal;
 
     });
+         $ionicModal.fromTemplateUrl('views/flashModal.html', {
+             scope: $scope
+         }).then(
+    function (modal) {
+        $scope.flashModal = modal;
+
+    });
     $ionicModal.fromTemplateUrl('templates/acceptEvent.html', {
         scope: $scope
     }).then(
@@ -285,6 +328,7 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
         $scope.openModalAccept = modal;
 
     });
+        
     //setTimeout(function () {
     //    $ionicLoading.hide();
     //$scope.openModalAccept.show();
@@ -295,8 +339,12 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
         //  mapservices.mapClikable(false)
         $scope.map.setClickable(true);
         $scope.openModalAccept.hide();
-        $scope.mapHeight = { "top": "52px", "bottom": "65px" };
+        $scope.mapHeight = { "top": "52px", "bottom": "107px" };
         $scope.currentPage = $scope.pages[$scope.currentPageIndex];
+    }
+    $scope.closeModalAccept = function () {
+        $scope.map.setClickable(true);
+        $scope.openModalAccept.hide();
     }
       //sharelink
     $scope.shareLink = function(){
@@ -312,23 +360,19 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
     });
     }
         //flash
-    $scope.flash = function () {
-        $cordovaFlashlight.available().then(function (availability) {
-            var avail = availability; // is available
-            console.log("Flash available");
-            $cordovaFlashlight.toggle()
-       .then(function (success) {
-           /* success */
-           console.log("toggle success");
-       },
-         function (error) {
-             /* error */
-             console.log("toggle error");
-         });
-        }, function () {
-            // unavailable
-            alert("Flash is not available in your phone.");
-        });
+    $scope.showFlashModal = function () {
+        $scope.flashModal.show();
+        if (ionic.Platform.isWebView()) {
+
+        $scope.map.setClickable(false);
+        }
+    }
+    $scope.sendMessage = function () {
+        if (ionic.Platform.isWebView()) {
+
+            $scope.map.setClickable(false);
+        }
+        $scope.backTemplates = !$scope.backTemplates; $scope.backArrow = !$scope.backArrow; $scope.bg_text = 'Select a message to send'
     }
 
     $scope.feedback = function () {
@@ -337,6 +381,30 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
 
     $scope.notification = function () {
         $state.go('notification');
+    }
+    $scope.showProfile = function () {
+       // alert();
+        $scope.profileShow = !$scope.profileShow;
+        $scope.backArrow = !$scope.backArrow;
+        if (ionic.Platform.isWebView()) {
+
+            $scope.map.setClickable(false);
+        }
+        $scope.bg_text = 'People attending';
+        $ionicSlideBoxDelegate.update()
+    }
+    $scope.firstFooterShow = function () {
+        $scope.backTemplates = true; $scope.backArrow = false; $scope.profileShow = false; $scope.bg_text = 'Experience Details';
+        if (ionic.Platform.isWebView()) {
+
+            $scope.map.setClickable(true);
+        }
+    }
+    $scope.slideNext = function () {
+        $ionicSlideBoxDelegate.next();
+    }
+    $scope.slidePrevious = function () {
+        $ionicSlideBoxDelegate.previous();
     }
 
     })
@@ -394,7 +462,7 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
         link: function (scope,elem,attr) {
             elem.bind('click', function (e) {
                 console.log(scope.data);
-                mapservices.mapClikable(true,'map');
+               // mapservices.mapClikable(true);
                 $state.go(scope.data);
             })
         }
