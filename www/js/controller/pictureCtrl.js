@@ -52,7 +52,7 @@ open2.controller('pictureCtrl', function ($scope, $rootScope, $http, $state, $co
 
     }
 
-  $scope.init();
+  // $scope.init();
 
   $scope.menu1 = function(){
     $scope.imageURL = null;

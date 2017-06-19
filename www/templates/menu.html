@@ -44,6 +44,10 @@
                             <input type="text" style="border-radius: 10px 10px 0px 0px;" ng-class="(selectedLocation=='current')?'green':'red'" ng-click="selectedLocation='current';setCurrentLocation()" placeholder="Current Location" ng-model="currentLocation" readonly="" />
                             <hr>
                             <input style="border-radius: 0px 0px 10px 10px;" ng-class="(selectedLocation=='selectlocation')?'green':'red'" ng-click="selectedLocation='selectlocation'" type="text" placeholder="Enter Location" google-autocomplete-suggestion location="selectAutocompleteLocation" country-code="" on-selection="onAddressSelection(location)" ng-model="selectAutocompleteLocation.formatted_address" />
+
+                            <!-- <ion-google-place placeholder="Enter an address, Apt# and ZIP" ng-model="location" current-location="true" /> -->
+
+                            
                         </div>
                     </center>
                 </div>
