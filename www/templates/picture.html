@@ -11,7 +11,9 @@
 
 <div class="container-fluid p0 camera" ><img ng-src="{{imageURL ? imageURL : 'img/camera.png'}}" width="100%"/></div>
 
-<div class="container-fluid p0 text-center cbutton" ng-click="init()"></div>
+    <div style="width: 100vw;margin: 0 auto;bottom: 0px;position: absolute;">
+        <div class="container-fluid p0 text-center cbutton" ng-click="init()"></div>
+    </div>
 
 
 
@@ -19,5 +21,5 @@
 
 
 <div class="prevb" ui-sref="menu"><span><i class="ion-chevron-left" style="position: absolute;bottom: -10px;left: 22px;"></i></span></div>
-<div class="skip" ng-click="menu1()"><p>Skip</p></div>
+<div class="skip" ui-sref="menu"><p>Skip</p></div>
 </ion-view>

@@ -70,21 +70,27 @@ open2.controller('loginCtrl', function ($scope, $rootScope, $http, $state, fbser
             fbservice.fbLogin().then(function (succes) {
                 $ionicBackdrop.release();
                // alert(JSON.stringify(succes));
-                // $ionicLoading.show({ template: "Logged in with facebook" });
+              //  $ionicLoading.show({ template: "Logged in with facebook" });
+                // $ionicLoading.show({ template: "Initiating firebase login" });
                 $ionicLoading.show(
                   {
-                     template: '<ion-spinner icon="circles" class="spinner-calm"></ion-spinner>'
-                });
+                      template: '<ion-spinner icon="circles" class="spinner-calm"></ion-spinner>'
+                  });
                 firebaseservices.loginFacebookFirebase(succes).then(function (firebaseUser) {
-                    $ionicLoading.hide();
+
+                     $ionicLoading.hide();
+                    $ionicBackdrop.release();
+                   
                   //  alert(JSON.stringify(firebaseUser));
                     localStorage.setItem('UserId', firebaseUser.uid);
                     localStorage.setItem('UserLoggedIn', 'true');
                     localStorage.setItem('myDetails', JSON.stringify({ email: firebaseUser.email, first_name: firebaseUser.displayName, picture: { data: { url: firebaseUser.photoURL } } }));
                     // alert(JSON.stringify(success));
+                   
                     $state.go("menu");
                 }, function (er) {
                     // alert(JSON.stringify(er));
+                    $ionicLoading.hide();
                     alert('Error in firebase login')
 
                 })
@@ -106,6 +112,8 @@ open2.controller('loginCtrl', function ($scope, $rootScope, $http, $state, fbser
         }
   
   }
+
+  
 
 
 

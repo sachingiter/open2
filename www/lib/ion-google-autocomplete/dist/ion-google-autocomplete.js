@@ -14,7 +14,7 @@ angular.module('ion-google-autocomplete', [])
             $scope.search.query = '';
 
             var template = [
-                '<ion-modal-view>',
+                '<ion-modal-view style="width: 80%; height: 100px; top: 215px; left: 30px;" >',
                 '<ion-header-bar class="item-input-inset">',
                 '<label class="item-input-wrapper">',
                 '<i class="icon ion-search placeholder-icon"></i>',

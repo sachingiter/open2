@@ -3,7 +3,7 @@
 
         <div class="header-cls" style="text-align:center;width: 100vw;height:80px">
             <div class="buttons navicon-btn">
-                <button class="button-icon ion-navicon" style="color:white" open-modal></button>
+                <open-modal map="map"><button class="button-icon ion-navicon" style="color:white"></button></open-modal>
             </div>
             <img src="img/o2-logo-app-icon.png" width="70" />
         </div>
@@ -35,8 +35,21 @@
             </h4>
         </div>
     </ion-header-bar>
-    <ion-content style="top:52px">
-            <div class="container-fluid p0" id="map" style="height: -webkit-calc(100vh - 52px)">
+    <ion-header-bar align-title="center" class="bar-clear" style="height:80px;padding:0px" ng-show="currentPage=='createdEvents'">
+
+        <div class="header-cls" style="text-align:center;width: 100vw;height:80px">
+            <div class="buttons navicon-btn">
+                <open-modal map="map"><button class="button-icon ion-navicon" style="color:white" ></button></open-modal>
+            </div>
+            <img src="img/o2-logo-app-icon.png" width="70" ui-sref="menu" />
+
+        </div>
+        <a class="pull-right ws" ng-click="shareLink()"><img class="share" src="img/share.png" /></a>
+
+
+    </ion-header-bar>
+    <ion-content ng-style="mapHeight">
+            <div class="container-fluid p0" id="map" style="height:100%;position:relative;" ng-click="map.setClickable(true)">
                
                 <div class="" ng-show="currentPage=='location'">
                     <center>
@@ -67,12 +80,62 @@
                     </div>
                 </div>
                 <div class="nextb" ng-show="currentPage=='menu'" ng-click="nextPage()"><span><i class="ion-plus" style="position: absolute;bottom: -10px;right: 24px;"></i></span></div>
-                <div class="prevb" ng-click="backPage()" ng-hide="currentPage=='menu'"><span><i class="ion-chevron-left" style="position: absolute;bottom: -10px;left: 22px;"></i></span></div>
-                <div class="nextb" ng-click="nextPage()" ng-hide="currentPage=='menu'" ng-show="notSelectedEvent"><span><i class="ion-chevron-right" style="position: absolute;bottom: -10px;right: 24px;"></i></span></div>
+                <div class="prevb" ng-click="backPage()" ng-hide="currentPage=='menu'||currentPage=='createdEvents'"><span><i class="ion-chevron-left" style="position: absolute;bottom: -10px;left: 22px;"></i></span></div>
+                <div class="nextb" ng-click="nextPage()" ng-hide="currentPage=='menu'||currentPage=='createdEvents'" ng-show="notSelectedEvent"><span><i class="ion-chevron-right" style="position: absolute;bottom: -10px;right: 24px;"></i></span></div>
 
             </div>
+       
+           
 
        
+       
     </ion-content>
+    <!--<ion-footer-bar style="height: 80px;border-top-width: 0px;
+    border-bottom-width: 0;background-position: bottom; background-color:transparent;   padding: 0px;">
+      
+    </ion-footer-bar>-->
+    <div class="bar bar-footer bar-footer-cls" ng-show="currentPage=='createdEvents'">
+     <span class="back-img" ng-show="backArrow" ng-click="firstFooterShow()"><img src="img/back.png"/></span>
+        <p class="bg-img-txt">{{bg_text}}</p>
+        <div class="row text-center background_footer" ng-show="backTemplates&&!profileShow">
+          
+                <div class="col col-25" ng-click="openModal()" ng-class="(isShown1)?'opaque_img':'abc'">  <img src="img/exit.png" width="80" /></div>
+                <div class="col col-25" ng-class="(isShown1)?'opaque_img':'abc'" ng-click="sendMessage()">  <img src="img/message.png" width="80" /></div>
+                <div class="col col-25" ng-class="(isShown1)?'opaque_img':'abc'" ng-click="showProfile()">  <img src="img/users.png" width="80" /></div>
+                <div class="col col-25" ng-click="showFlashModal()" ng-class="(isShown1)?'opaque_img':'abc'">  <img src="img/strobe.png" width="80" /></div>
+           
+           
+        </div>
+        <div class="text-center background_footer"  ng-show="!backTemplates">
+            <div  style="margin-top:15px;text-align:center;">
+                <p ng-repeat="templates in messageTemplates" class="template-message">{{templates}}</p>
+            </div>
+           
+        </div>
+        <div class="background_footer" ng-show="profileShow">
+          <span class="arrow-left" ng-click="slidePrevious()"><i class="icon ion-arrow-left-b icon-arrow"></i></span>
+        <ion-slide-box    show-pager="false" style="bottom:-21px;">
+            <ion-slide>
+                <div class="box blue" style="height:60px;float:left"><img src="img/s9.png"/></div>
+                <div class="box yellow" style="height:60px;float:left"><img src="img/s8.png" /></div>
+                <div class="box pink" style="height:60px;float:left"><img src="img/s6.png" /></div>
+            </ion-slide>
+            <ion-slide>
+                <div class="box blue" style="height:60px;float:left"><img src="img/s5.png" /></div>
+                <div class="box yellow" style="height:60px;float:left"><img src="img/s4.png" /></div>
+                <div class="box pink" style="height:60px;float:left"><img src="img/s3.png" /></div>
+            </ion-slide>
+            <ion-slide>
+                <div class="box blue" style="height:60px;float:left"><img src="img/s2.png" /></div>
+                <div class="box yellow" style="height:60px;float:left"><img src="img/s1.png" /></div>
+                <div class="box pink" style="height:60px;float:left"><img src="img/s9.png" /></div>
+            </ion-slide>
+      
+        </ion-slide-box>
+            <span class="arrow-right" ng-click="slideNext()"><i class="icon ion-arrow-right-b icon-arrow"></i></span>
+        </div>
+
+        
+    </div>
 
    </ion-view>

@@ -1,0 +1,33 @@
+﻿<ion-view style="background-color:transparent">
+
+    <ion-content style="top:100px">
+        <div class="modal-content" style="display:flex;height:73vh">
+
+            <div class="modal-body" style="align-self:center">
+                <img ng-src="{{event.userImage}}" class="img_round1" /><img ng-src="{{event.eventImage}}" class="img_round2" />
+                <div class="cre" ng-show="isShown"><a><img src="img/ic_report.png" ng-click="isShown=!isShown" /></a></div>
+                <div class="mes" style="padding-top :70px;" ng-show="isShown">
+                    <p style="text-align: center;font-size: 20px;
+    color: grey;">{{event.Name}} ({{event.distance * 1000}}m),<br />is open 2 {{event.eventDetail}}</p><center style="width: 100%;"><img ng-src="{{event.emoji}}" width="50" height="50"/></center><span class="time-left">{{event.timeCreated}} min ago.</span>
+                </div>
+                <div class="drop-btn" ng-show="isShown" ng-click="joinEvent(event.key)"><p>Join Now</p></div>
+
+
+
+                <div class="mes" style="margin-top: 50px;padding-bottom:30px;padding-left: 16px;padding-right: 16px;" ng-show="!isShown">
+                    <p style="text-align: center;font-size: 20px;color:grey;">Rate This User</p>
+                    <textarea placeholder="Type details here"></textarea>
+                </div>
+                <div class="drop-btn1" ng-show="!isShown"><p>Report</p></div>
+                <a><img src="img/back.png" ng-click="closeModalAccept()" style="position: absolute;/* height: 10px; */left: -20px;" /></a>
+            </div>
+
+
+        </div>
+
+
+
+
+    </ion-content>
+
+</ion-view>
