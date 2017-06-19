@@ -141,6 +141,7 @@ angular.module('mapservices.factory', []).factory('mapservices', ['$http', '$q',
         },
         mapClikable: function (value,id) {
             map.setClickable(value);
-        }
+        },
+       
     };
 }]);

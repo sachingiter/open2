@@ -1,4 +1,4 @@
-open2.controller('pictureCtrl', function ($scope, $rootScope, $http, $state, $cordovaSocialSharing, $cordovaCamera) {
+open2.controller('pictureCtrl', function ($scope, $rootScope,firebaseservices, $http,$stateParams, $state, $cordovaSocialSharing, $cordovaCamera, cordovacameraservice) {
 
   // $scope.user = {};
   $scope.imageURL = "";
@@ -30,20 +30,28 @@ open2.controller('pictureCtrl', function ($scope, $rootScope, $http, $state, $co
     }
 
     $scope.init = function(){
+      
+        cordovacameraservice.captureImage().then(function (suc) {
+            $scope.imageURL = 'data:image/jpeg;base64,' + suc;
+            $scope.selectedImage()
+       
+        }, function (er) {
 
-        CameraPreview.startCamera({ x: 40, y: 80, width: 300, height: 300, camera: CameraPreview.CAMERA_DIRECTION.BACK, toBack: false, previewDrag: false, tapPhoto: true });
+
+        })
     }
    
-    $scope.takePicture = function () {
-        CameraPreview.takePicture({ width: 300, height: 300, quality: 85 }, function (imgData) {
-            $scope.imageURL = 'data:image/jpeg;base64,' + imgData[0];
-
-
-            CameraPreview.hide();
-
-
-        });
+   
+    $scope.selectedImage = function () {
+        var data = JSON.parse($stateParams.data);
+        data.eventPhoto = $scope.imageURL;
+        console.log('called selected image');
+        firebaseservices.addDataToFirebase(data, 'Events').then(function (res) {
+            // $scope.currentPageIndex--;
+            $rootScope.watchPosition(res)
+            $state.go('menu');
+        })
     }
-  $scope.init();
+ // $scope.init();
 
 });

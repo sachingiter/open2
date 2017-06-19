@@ -1,5 +1,5 @@
 ﻿
-open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase,$firebaseObject,$ionicSlideBoxDelegate, $http,$ionicPlatform, $state,$cordovaSocialSharing,$cordovaFlashlight, mapservices, firebaseservices, $ionicModal) {
+open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase,$firebaseObject,$stateParams,$ionicSlideBoxDelegate, $http,$ionicPlatform, $state,$cordovaSocialSharing,$cordovaFlashlight, mapservices, firebaseservices, $ionicModal) {
 
     // $scope.user = {};
     // $scope.user.mail = "prash_jain92@mailinator.com";
@@ -19,10 +19,18 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
         var geoQuery;
     var myLat = 37.0902;
     var myLng = 95.7129;
+    $scope.execution = true;
     $scope.isEventAvailable;
     $scope.map;
     $scope.mapHeight = {"top":"52px","bottom":"0px" };
-    
+    mapservices.getLatLong().then(function (position) {
+        console.log('postioncalled');
+        console.log(position);
+
+        myLat = position.coords.latitude;
+        myLng = position.coords.longitude;
+    });
+  
     setInterval(function () {
         $scope.getEventAvailable();
     }, 30000)
@@ -35,43 +43,47 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
                     if ($scope.isEventAvailable.expireTime <= new Date().getTime()) {
                         firebaseservices.updateData('Events', $scope.isEventAvailable.key, { isExpired: true });
                         $scope.currentPageIndex = 0;
+                        firebaseservices.removeDataFromNode('EventsLocation/' + $scope.isEventAvailable.key);
+                       // $scope.watchID.clear();
+                        navigator.geolocation.clearWatch($scope.watchID);
                         $scope.mapHeight = { "top": "52px", "bottom": "0px" };
-                        $scope.currentPage = $scope.pages[$scope.currentPageIndex]
+                        $scope.currentPage = $scope.pages[$scope.currentPageIndex];
+                        $scope.eventOpen = false;
+                      //  $scope.createMapAfterCheckingEvents();
                     }
                     else {
+
                         $scope.mapHeight = { "top": "52px", "bottom": "107px" };
                         $scope.currentPageIndex = 3;
+                        if ($scope.execution) {
+                            $scope.execution = false;
+                        $scope.myEvent = {};
+                       // $scope.markerDetails = marker.get("markerDetails");
+                        $scope.myEvent.eventImage = value.eventPhoto;
+                        $scope.myEvent.key = value.key;
+                        $scope.myEvent.eventDetail = value.eventDetail;
+                        $scope.myEvent.distance = (mapservices.distanceBetweenTwoLatLong(value.Latitude, value.Longitude, myLat, myLng, 'km')).toFixed(1);
+                        $scope.myEvent.timeCreated = ((new Date().getTime() - value.CreatedTime) / (1000 * 60)).toFixed(0);
+                        $scope.myEvent.emoji = value.photoUrl.replace('./', '');
+                        console.log(value);
+                        $rootScope.watchPosition(value.key);
+                        firebaseservices.getDataFromNodeValue('Users/' + value.CreatedBy).then(function (suc) {
+                            $scope.myEvent.userImage = suc.PhotoUrl;
+                            $scope.myEvent.Name = suc.Name;
+
+
+                        })
+                        }   
+                        $scope.eventOpen = true;
                         $scope.currentPage = $scope.pages[$scope.currentPageIndex]
+                        //$scope.createMapAfterCheckingEvents();
                     }
                 }
             })
         })
     }
     $scope.getEventAvailable();
-    //setTimeout(function () {
-    //    var d = document.getElementsByTagName('ion-content')[0];
-    //    d.className += " has-header";
-    //}, 2000)
-    
-    //setTimeout(function () {
-    //   var map= mapservices.returnObj()
-    //    map.addMarker({
-    //        position:{ lat: 37.422359, lng: -122.084344 },
-    //        title: "absdf",
-    //        snippet: "Open2",
-    //        markerName: "gdasfd",
-    //        animation: plugin.google.maps.Animation.BOUNCE,
-    //        'icon': {
-    //            'url': "./img/s3.png",
-    //        }
-    //    }, function (marker) {
-    //        marker.addEventListener(plugin.google.maps.event.MARKER_CLICK, function () {
-    //            //alert("Marker is clicked");
-    //            console.log(marker.get("markerName"))
-    //        });
-    //    });
-
-    //}, 10000)
+   
     $scope.currentPageIndex = 0;
     $scope.pages = ['menu','location','chooseEvents','createdEvents'];
     $scope.currentPage = 'menu';
@@ -85,9 +97,15 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
     $ionicLoading.show();
     }
     else {
+        setTimeout(function () {
+
+        $scope.openModalAccept.show();
+        }, 500)
         $scope.currentPage = 'createdEvents';
         $ionicSlideBoxDelegate.update()
     }
+   // $scope.createMapAfterCheckingEvents = function () {
+
     mapservices.getLatLong().then(function (position) {
         console.log('postioncalled');
         console.log(position);
@@ -106,7 +124,13 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
         mapservices.getLocationName(request).then(function (respo) {
             console.log(respo);
             if (respo) {
-            $scope.currentLocation = respo.thoroughfare + ', ' + respo.locality + ', ' + respo.adminArea;
+                var subLocatoin = '';
+                if (respo.thoroughfare) {
+                    subLocatoin = respo.thoroughfare;
+                } else if (respo.subLocality) {
+                    subLocatoin = respo.subLocality;
+                }
+                $scope.currentLocation = subLocatoin + ', ' + respo.locality + ', ' + respo.adminArea;
             } else {
                 $scope.getLocationName(request);
             }
@@ -120,6 +144,7 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
     }, function (er) {
         $scope.createMap(myLat, myLng);
     });
+    
     $scope.getLocationName = function (request) {
        
         mapservices.getLocationName(request).then(function (respo) {
@@ -170,15 +195,26 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
                 });
 
                 geoQuery.on("key_entered", function (key, location, distance) {
-                    console.log(key + " entered query at " + location + " (" + distance + " km from center)");
+                  //  console.log(key + " entered query at " + location + " (" + distance + " km from center)");
                     firebaseObj = firebaseRef.child('Events/' + key);
                     var obj = $firebaseObject(firebaseObj)
                     obj.$loaded(function (res) {
                         // console.log("++++++++++++++++++++++=keyentered+++++++++++++++=");
                         //console.log(res);
-                         $scope.events.push(res);
+                        if (!res.isExpired ) {
+                            var eveData = res;
+                            eveData.key = key;
+                            $scope.events.push(eveData);
+                            if (res.CreatedBy==localStorage.getItem('UserId')) {
+
+                                $scope.addMarker(eveData);
+                            }
+                            else {
+                                $scope.addMarker(eveData);
+                            }
+                        }
                         //deferred.resolve(events);
-                         $scope.addMarker(res);
+
 
                     }, function () {
 
@@ -196,29 +232,72 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
                     //})
                     //deferred.resolve(events);
                 });
+                geoQuery.on("key_moved", function (key, location, distance) {
+                    $scope.map.clear();
+                   // alert(typeof location)
+                    for (var i = 0; i < $scope.events.length; i++) {
+                        if (key == $scope.events[i].key) {
+                            $scope.events[i].Latitude = location[0];
+                            $scope.events[i].Longitude = location[1];
+                        }
+                        $scope.addMarker($scope.events[i]);
+                    }
+                   // alert(key + " moved within query to " + location + " (" + distance + " km from center)");
+                });
 
             });
         }, false);
       
     }
+    $rootScope.watchPosition = function (eventid) {
+      //  alert(eventid+"frojm watch postion");
+        $scope.watchID = navigator.geolocation.watchPosition(function (position) {
+                var latPos = position.coords.latitude;
+                var lngPos = position.coords.longitude;
+              //  alert(eventid);
+                firebaseservices.updateData('EventsLocation', eventid + '/l', { 0: latPos, 1: lngPos }).then(function (res) {
+                //    alert('success')
+                })
+            }, function (er) {
+
+                alert(er);
+            }, { maximumAge: 3000, timeout: 5000, enableHighAccuracy: true });
+        }
     $scope.addMarker = function (res) {
         $scope.map.addMarker({
             // position: position, //{ lat: 37.422359, lng: -122.084344 },
             position: { lat: res.Latitude, lng: res.Longitude },
             title: res.eventDetail,
             snippet: "Open2",
-            markerName: res.eventDetail,
+           
+          
             animation: plugin.google.maps.Animation.BOUNCE,
             'icon': {
                 'url': res.photoUrl,
             }
         }, function (marker) {
-            if (res.eventDetail != 'location') {
-            marker.addEventListener(plugin.google.maps.event.MARKER_CLICK, function () {
-                //alert("Marker is clicked");
+            marker.set("markerDetails", res);
+            if (res.isTapable != 'location' && res.CreatedBy!=localStorage.getItem('UserId')) {
+                marker.addEventListener(plugin.google.maps.event.MARKER_CLICK, function () {
+                    //alert("Marker is clicked");
+                    $scope.event = {};
+                    $scope.markerDetails = marker.get("markerDetails");
+                    $scope.event.eventImage = res.eventPhoto;
+                    $scope.event.eventDetail = res.eventDetail;
+                    $scope.event.distance = (mapservices.distanceBetweenTwoLatLong(res.Latitude, res.Longitude, $scope.myLatitude, $scope.myLongitude, 'km')).toFixed(1);
+                    $scope.event.timeCreated = ((new Date().getTime() - res.CreatedTime) / (1000 * 60)).toFixed(0);
+                    $scope.event.emoji = res.photoUrl.replace('./', '');
+                    $scope.event.key = res.key;
+                    console.log(res);
+                    firebaseservices.getDataFromNodeValue('Users/' + res.CreatedBy).then(function (suc) {
+                        $scope.event.userImage = suc.PhotoUrl;
+                        $scope.event.Name = suc.Name;
+                        
+                        
+                    })
                 $scope.openModalAccept.show();
                 $scope.map.setClickable(false);
-                console.log(marker.get("markerName"))
+                console.log($scope.markerDetails)
             });
 
             }
@@ -252,6 +331,7 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
         $scope.currentPage = $scope.pages[$scope.currentPageIndex];
         if ($scope.currentPageIndex == 2) {
             $scope.notSelectedEvent = false;
+            $scope.map.clear();
             $scope.map.setClickable(true);
 
         }
@@ -264,11 +344,13 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
             firebaseservices.getDataFromNodeValue('AppConfig/ExpireTime').then(function (suc) {
 
                 var date=new Date().getTime();
-               var expDate=suc*60*1000+date;
-               firebaseservices.addDataToFirebase({ photoUrl: $scope.selectedImage, eventDetail: $scope.eventText, Latitude: $scope.myLatitude, Longitude: $scope.myLongitude, expireTime: expDate, isExpired: false,CreatedBy:localStorage.getItem('UserId'),CreatedTime:date }, 'Events').then(function (res) {
-               // $scope.currentPageIndex--;
-                $state.go('picture')
-            })
+                var expDate = suc * 60 * 1000 + date;
+
+            
+                // $scope.currentPageIndex--;
+               
+                   $state.go('picture', { data: JSON.stringify({ photoUrl: $scope.selectedImage, eventDetail: $scope.eventText, Latitude: $scope.myLatitude, Longitude: $scope.myLongitude, expireTime: expDate, isExpired: false, CreatedBy: localStorage.getItem('UserId'), CreatedTime: date,PeopleJoined:true }) })
+        
             },function(er){
             
             })
@@ -276,11 +358,23 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
         }
         if ($scope.currentPageIndex == 1) {
             $scope.map.setClickable(false);
+            // mapservices.mapClikable(false,'map');
+             $scope.map.clear();
+             // $scope.map.off();
             $scope.addMarker({ Latitude: $scope.myLatitude, Longitude: $scope.myLongitude, eventDetail: 'location', photoUrl: './img/destinationpin.png' });
            
            
         }
     }
+    //var firebaseRef = firebase.database().ref();
+    //var geoFire = new GeoFire(firebaseRef.child('EventsLocation/'));
+    
+    //var geoQuery = geoFire.query({
+    //    center: [$scope.myLatitude, $scope.myLongitude],
+    //    radius: radiusInKm
+    //});
+
+   
     $scope.openModal = function () {
         $scope.isShown1 = true;
         $scope.map.setClickable(false);
@@ -301,10 +395,29 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
     };
    
     $scope.backPage = function () {
+
         $scope.notSelectedEvent = true;
         $scope.currentPageIndex--;
+
+        if ($scope.currentPageIndex == 1) {
+            $scope.map.clear();
+            $scope.addMarker({ Latitude: $scope.myLatitude, Longitude: $scope.myLongitude, eventDetail: 'location', photoUrl: './img/destinationpin.png' });
+            $scope.map.setClickable(false);
+        } else if ($scope.currentPageIndex == 2) {
+            $scope.map.clear();
+            $scope.map.setClickable(false);
+
+        } else {
+            $scope.map.setClickable(true);
+            $scope.map.clear();
+            for (var i = 0; i < $scope.events.length; i++) {
+                $scope.addMarker($scope.events[i]);
+            }
+            //deferred.resolve(events);
+
+        }
         $scope.currentPage = $scope.pages[$scope.currentPageIndex];
-      
+
     }
    
          $ionicModal.fromTemplateUrl('templates/popup1.html', {
@@ -333,14 +446,17 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
     //    $ionicLoading.hide();
     //$scope.openModalAccept.show();
     //}, 5000)
-    $scope.joinEvent = function () {
+    $scope.joinEvent = function (id) {
         $scope.currentPageIndex=3;
        // $scope.notSelectedEvent = true;
         //  mapservices.mapClikable(false)
         $scope.map.setClickable(true);
         $scope.openModalAccept.hide();
         $scope.mapHeight = { "top": "52px", "bottom": "107px" };
+        console.log($scope.markerDetails)
         $scope.currentPage = $scope.pages[$scope.currentPageIndex];
+        
+        firebaseservices.setDataToNode('Events/' + id + '/PeopleJoined', { [localStorage.getItem('UserId')]: true })
     }
     $scope.closeModalAccept = function () {
         $scope.map.setClickable(true);

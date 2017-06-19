@@ -98,7 +98,7 @@ angular.module('firebaseservices.factory', []).factory('firebaseservices', ['$q'
                     //console.log(list)
                    // list.$add({ CreatedTaskId: suc.key });
                // }
-                deferred.resolve(list);
+                deferred.resolve(suc.key);
             }, function (er) {
                 deferred.reject(er)
             });
@@ -412,6 +412,12 @@ function (error) {
                 defer.resolve(dataTop)
             });
             return defer.promise;
+        },
+        setDataToNode: function (node,data) {
+            firebaseRef.child(node).update(data);
+        },
+        removeDataFromNode: function (node) {
+            firebaseRef.child(node).remove();
         }
     }
     return services;

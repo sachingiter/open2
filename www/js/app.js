@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
  
-var open2 = angular.module('starter', ['ionic','fbservice.factory', 'ngCordova','firebaseservices.factory','ion-google-autocomplete', 'mapservices.factory', 'firebase']);
+var open2 = angular.module('starter', ['ionic','fbservice.factory', 'ngCordova','cordovacameraservice.module','firebaseservices.factory','ion-google-autocomplete', 'mapservices.factory', 'firebase']);
 
 open2.run(function ($ionicPlatform, $cordovaGeolocation, $state, $firebaseAuth) {
     var config = {
@@ -16,6 +16,9 @@ open2.run(function ($ionicPlatform, $cordovaGeolocation, $state, $firebaseAuth) 
     firebase.initializeApp(config);
     
     $ionicPlatform.ready(function () {
+        $ionicPlatform.registerBackButtonAction(function () {
+            console.log("back button");
+        }, 100);
         if (!ionic.Platform.isWebView()) {
             console.log('webview');
             var authObj = $firebaseAuth();
@@ -164,7 +167,7 @@ open2.config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider)
 
     })
     .state('picture', {
-        url: '/picture',
+        url: '/picture/:data',
         templateUrl: 'templates/picture.html',
         controller: 'pictureCtrl'
 
