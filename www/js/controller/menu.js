@@ -13,6 +13,7 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
     $scope.backArrow = false;
     $scope.messageTemplates = ["I'm here!", "Sorry, cant't make it!", "On my way!", "On your way?"];
     $scope.events = [];
+    $scope.flashInterval = 'bg_img';
     $ionicPlatform.ready(function () {
         var firebaseRef = firebase.database().ref();
         var geoFire = new GeoFire(firebaseRef.child('EventsLocation/'));
@@ -492,11 +493,14 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
         //flash
     $scope.showFlashModal = function () {
         $scope.flashModal.show();
+        
         if (ionic.Platform.isWebView()) {
 
         $scope.map.setClickable(false);
         }
+
     }
+
     $scope.sendMessage = function () {
         if (ionic.Platform.isWebView()) {
 
@@ -587,8 +591,14 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
                     console.log("is not WebView");
 
                 } else {
-
-                    scope.map.setClickable(true)
+                    if(scope.bg_text == 'Experience Details'){
+                        console.log("setClickable true");
+                        scope.map.setClickable(true);
+                    }else {
+                        console.log("setClickable false");
+                        scope.map.setClickable(false);
+                    }
+                    
                 }
                 scope.modal.hide();
             };

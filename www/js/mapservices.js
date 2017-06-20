@@ -73,7 +73,7 @@ angular.module('mapservices.factory', []).factory('mapservices', ['$http', '$q',
                 title: name,
                 snippet: "Open2",
                 markerName: markerIcon,
-                animation: plugin.google.maps.Animation.BOUNCE,
+                // animation: plugin.google.maps.Animation.BOUNCE,
                 'icon': {
                     'url': markerIcon,
                 }
