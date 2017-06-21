@@ -1,4 +1,4 @@
-<ion-view class = "bg_img">
+<ion-view ng-init="index=1" ng-class="(index==1)?'bg_img':(index==2)?'bg_img_yellow':'bg_img_red'">
     
     <ion-content >
        
@@ -11,7 +11,7 @@
     <div class="bar bar-footer bar-footer-cls" ng-show="currentPage=='createdEvents'">
         <span class="back-img" ng-click="flashModal.hide();map.setClickable(true)"><img src="img/back.png" /></span>
         <p class="bg-img-txt">Be spotted</p>
-        <div class="row text-center background_footer">
+        <div class="row text-center background_footer" ng-click="(index>=3)?index=1:index=index+1">
             <p style="text-align:center;text-align: center;
     margin-top: 22px;
     padding: 0 40px 0 40px;

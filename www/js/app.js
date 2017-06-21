@@ -137,8 +137,8 @@ open2.config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider)
 
     .state('appfeedback', {
         url: '/appfeedback',
-        templateUrl: 'templates/appfeedback.html'
-
+        templateUrl: 'templates/appfeedback.html',
+        controller: 'feedBackCtrl'
 
     })
 

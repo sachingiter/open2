@@ -13,7 +13,6 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
     $scope.backArrow = false;
     $scope.messageTemplates = ["I'm here!", "Sorry, cant't make it!", "On my way!", "On your way?"];
     $scope.events = [];
-    $scope.flashInterval = 'bg_img';
     $ionicPlatform.ready(function () {
         var firebaseRef = firebase.database().ref();
         var geoFire = new GeoFire(firebaseRef.child('EventsLocation/'));
@@ -52,6 +51,7 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
                         $scope.mapHeight = { "top": "52px", "bottom": "0px" };
                         $scope.currentPage = $scope.pages[$scope.currentPageIndex];
                         $scope.eventOpen = false;
+                        firebaseservices.get
                       //  $scope.createMapAfterCheckingEvents();
                     }
                     else {
@@ -76,6 +76,18 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
 
 
                         })
+                        $scope.joinedPeople = [];
+                      
+                        angular.forEach(value.PeopleJoined, function (value, key) {
+                            firebaseservices.getDataFromNodeValue('Users/' + key).then(function (user) {
+                                if (key != 'key') {
+                                    $scope.joinedPeople.push(user);
+
+                                }
+                                    console.log($scope.joinedPeople);
+                                })
+                            
+                        })
                         }   
                         $scope.eventOpen = true;
                         $scope.currentPage = $scope.pages[$scope.currentPageIndex]
@@ -83,7 +95,7 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
                     }
                 } else {
                     $ionicLoading.hide();
-                    firebaseservices.getUsersFromFirebaseNode();
+                   
                 }
             })
         })
@@ -207,8 +219,7 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
                     firebaseObj = firebaseRef.child('Events/' + key);
                     var obj = $firebaseObject(firebaseObj)
                     obj.$loaded(function (res) {
-                        // console.log("++++++++++++++++++++++=keyentered+++++++++++++++=");
-                        //console.log(res);
+                       
                         if (!res.isExpired ) {
                             var eveData = res;
                             eveData.key = key;
@@ -279,7 +290,7 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
             snippet: "Open2",
            
           
-            animation: plugin.google.maps.Animation.BOUNCE,
+          //  animation: plugin.google.maps.Animation.BOUNCE,
             'icon': {
                 'url': res.photoUrl,
             }
@@ -339,7 +350,7 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
         $scope.currentPage = $scope.pages[$scope.currentPageIndex];
         if ($scope.currentPageIndex == 2) {
             console.log("adfasdfsdf 2");
-            mapservices.mapClikable(true,'map');
+            mapservices.mapClikable(true);
             $scope.notSelectedEvent = false;
             $scope.map.clear();
             $scope.map.setClickable(true);
@@ -493,14 +504,11 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
         //flash
     $scope.showFlashModal = function () {
         $scope.flashModal.show();
-        
         if (ionic.Platform.isWebView()) {
 
         $scope.map.setClickable(false);
         }
-
     }
-
     $scope.sendMessage = function () {
         if (ionic.Platform.isWebView()) {
 
@@ -591,14 +599,8 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
                     console.log("is not WebView");
 
                 } else {
-                    if(scope.bg_text == 'Experience Details'){
-                        console.log("setClickable true");
-                        scope.map.setClickable(true);
-                    }else {
-                        console.log("setClickable false");
-                        scope.map.setClickable(false);
-                    }
-                    
+
+                    scope.map.setClickable(true)
                 }
                 scope.modal.hide();
             };
