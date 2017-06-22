@@ -76,6 +76,12 @@ body .navbar-toggle{ margin-top:35px; margin-right:0;}
 body .navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
     background-color: transparent;
 }
+
+html, body, .ion-app, .ion-content {
+  background-color: transparent;
+}
+
+
 .tdown {
     margin-right: 15px;
     transform: rotate(180deg);
@@ -234,6 +240,21 @@ body .rd textarea{border-radius:15px; border:none; height:300px;}
    position:relative;
    bottom:73px;
      cursor:pointer}
+
+.retake{
+    background-color: transparent;
+   /*background-image:url(../img/retake-photo.png);*/
+    border: 5px solid white;
+    border-radius: 50%;
+    box-shadow: 0 4px 6px 5px gray;
+    height: 100px;
+    width: 100px;
+    margin: 20px auto;
+   position:relative;
+   bottom:73px;
+    cursor:pointer
+}
+
 body.gray{ background-color:#D8D8D8;}
 .camera{ margin-top:70px;}
 
@@ -247,8 +268,8 @@ body.gray{ background-color:#D8D8D8;}
     background-size: cover;
 
 }
-.bg_img_red{
-     background-image:url(../img/spotted-background2.png);
+.bg_img_blue{
+     background-image:url(../img/spotted-background1.png);
      background-size: cover;
 }
 .bg_img_yellow{

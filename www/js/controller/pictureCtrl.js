@@ -1,7 +1,9 @@
-open2.controller('pictureCtrl', function ($scope, $rootScope,firebaseservices, $http,$stateParams, $state, $cordovaSocialSharing, $cordovaCamera, cordovacameraservice) {
+open2.controller('pictureCtrl', function ($scope, $rootScope,firebaseservices, $http,$stateParams, $state, $cordovaSocialSharing, $cordovaCamera, $window) {
 
   // $scope.user = {};
   $scope.imageURL = "";
+  $scope.take_picture = true;
+  var picureWidth;
   // $scope.user.mail = "prash_jain92@mailinator.com";
   // $scope.user.pass = "123456";
     //document.addEventListener('deviceready', function () {
@@ -31,25 +33,70 @@ open2.controller('pictureCtrl', function ($scope, $rootScope,firebaseservices, $
 
     $scope.init = function(){
       
-        cordovacameraservice.captureImage().then(function (suc) {
-            $scope.imageURL = 'data:image/jpeg;base64,' + suc;
-            $scope.selectedImage();
+        // cordovacameraservice.captureImage().then(function (suc) {
+        //     $scope.imageURL = 'data:image/jpeg;base64,' + suc;
+        //     $scope.selectedImage();
        
-        }, function (er) {
+        // }, function (er) {
 
 
-        })
+        // })
+         picureWidth = $window.innerWidth;
+
+        var options = {
+            x: 0,
+            y: 80,
+            width: picureWidth,
+            height: 350,
+            camera: CameraPreview.CAMERA_DIRECTION.BACK,
+            toBack: false,
+            tapPhoto: true,
+            previewDrag: false
+          };
+ 
+        CameraPreview.startCamera(options);
+
+
     }
+
+    $scope.init();
    
    
     $scope.selectedImage = function () {
-      console.log('called selected image');
-        var data = JSON.parse($stateParams.data);
+
+      CameraPreview.takePicture({width:350, height:350, quality: 50},function(base64PictureData){
+         /* code here */
+         console.log("inside takePicture");
+
+         
+         $scope.take_picture = false;
+
+
+        var imageSrcData = 'data:image/jpeg;base64,' + base64PictureData;
+        console.log("inside takePicture imageSrcData");
+        $scope.imageURL = imageSrcData;
+
+        // console.log("imageSrcData  :imageSrcData :  " + imageSrcData);
+
+         // CameraPreview.stopCamera();
+
+
+      });
+
+
+      
+    }
+
+    $scope.next = function(){
+
+      var data = JSON.parse($stateParams.data);
         data.eventPhoto = $scope.imageURL;
         
         firebaseservices.addDataToFirebase(data, 'Events').then(function (res) {
             // $scope.currentPageIndex--;
-            $rootScope.watchPosition(res)
+            CameraPreview.stopCamera();
+            $rootScope.watchPosition(res);
+
             $state.go('menu');
         })
     }
