@@ -86,7 +86,9 @@ open2.controller('loginCtrl', function ($scope, $rootScope, $http, $state, fbser
                     localStorage.setItem('UserLoggedIn', 'true');
                     localStorage.setItem('myDetails', JSON.stringify({ email: firebaseUser.email, first_name: firebaseUser.displayName, picture: { data: { url: firebaseUser.photoURL } } }));
                     // alert(JSON.stringify(success));
-                   
+                    firebaseservices.updateData('Users', firebaseUser.uid, { notificationToken: localStorage.getItem('token') }).then(function (res) {
+                        // alert(res);
+                    })
                     $state.go("menu");
                 }, function (er) {
                     // alert(JSON.stringify(er));

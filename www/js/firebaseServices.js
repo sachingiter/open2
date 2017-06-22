@@ -24,6 +24,7 @@ angular.module('firebaseservices.factory', []).factory('firebaseservices', ['$q'
                    // AppliedTasks: [{ AppliedTask: true }],
                     CreatedAt: new Date().getTime(),
                     Email: email,
+                    notificationToken: localStorage.getItem('token'),
                     FlaggedCount: 0,
                     InvitationDeepLink: 0,
                     InvitedByUserID: "invitedbyID",
@@ -403,6 +404,9 @@ function (error) {
                 data.key = snapshot.key;
                 defered.resolve(data)
                 console.log(data);
+            }, function (er) {
+                console.log(er)
+                defered.reject(er);
             })
             return defered.promise;
         },
@@ -413,7 +417,9 @@ function (error) {
         getDataWhereEqualTo: function (node, condition, orderBy) {
             var defer = $q.defer();
             var data = [];
+            //console.log('fire')
             firebaseRef.child(node).orderByChild(orderBy).equalTo(condition).on("child_added", function (dat) {
+                console.log('fire')
                 //console.log(data.val());
                 var result = dat.val();
                 result.key = dat.key;
@@ -421,6 +427,9 @@ function (error) {
                 defer.resolve(data);
                 console.log(dat.key);
 
+            }, function (er) {
+                console.log('fire')
+                defer.reject(er);
             });
             return defer.promise;
         },

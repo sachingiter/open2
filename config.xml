@@ -86,7 +86,6 @@
         <variable name="APP_ID" value="123165304922767" />
         <variable name="APP_NAME" value="Open2" />
     </plugin>
-
     <plugin name="cordova-plugin-geolocation" spec="^2.4.3" />
     <plugin name="cordova-plugin-googlemaps" spec="^1.4.0">
         <variable name="API_KEY_FOR_ANDROID" value="AIzaSyA4IYI3K3w8clmosd3RzxM-OF3CwXN4iM4" />

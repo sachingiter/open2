@@ -116,11 +116,12 @@
            
           <span class="arrow-left" ng-click="slidePrevious()"><i class="icon ion-arrow-left-b icon-arrow"></i></span>
         <ion-slide-box    show-pager="false" style="bottom:-21px;">
-            <ion-slide ng-repeat="img in joinedPeople track by $index">
-                <div class="box blue" style="height:60px;float:left"><img ng-src="{{joinedPeople[$index].PhotoUrl}}" height="70" width="70"/></div>
-                <div class="box yellow" style="height:60px;float:left" ng-if="(joindedPeople.length>=$index)"><img height="70" width="70" ng-src="{{joinedPeople[$index+1].PhotoUrl}}" /></div>
-                <div class="box pink" style="height:60px;float:left" ng-if="(joindedPeople.length>=$index)"><img height="70" width="70" ng-src="{{joinedPeople[$index+2].PhotoUrl}}" /></div>
-               
+            <ion-slide ng-repeat="img in joinedPeople track by $index" ng-if="(($index)%3==0)?true:false">
+                
+                    <div class="box blue" style="height:60px;float:left"><img ng-src="{{joinedPeople[$index].PhotoUrl}}" height="60" width="60" /></div>
+                    <div class="box yellow" style="height:60px;float:left"><img height="60" width="60" ng-src="{{joinedPeople[$index+1].PhotoUrl}}" /></div>
+                    <div class="box pink" style="height:60px;float:left"><img height="60" width="60" ng-src="{{joinedPeople[$index+2].PhotoUrl}}" /></div>
+                
             </ion-slide>
           
       

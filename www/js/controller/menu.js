@@ -1,5 +1,5 @@
 ﻿
-open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase,$firebaseObject,$stateParams,$ionicSlideBoxDelegate, $http,$ionicPlatform, $state,$cordovaSocialSharing,$cordovaFlashlight, mapservices, firebaseservices, $ionicModal) {
+open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,firebase,$firebaseObject,$stateParams,$ionicSlideBoxDelegate, $http,$ionicPlatform, $state,$cordovaSocialSharing,$cordovaFlashlight, mapservices, firebaseservices, $ionicModal) {
 
     // $scope.user = {};
     // $scope.user.mail = "prash_jain92@mailinator.com";
@@ -20,23 +20,22 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
     var myLat = 37.0902;
     var myLng = 95.7129;
     $scope.execution = true;
+    $scope.eventOpen = false;
+    console.log($scope.eventOpen);
     $scope.isEventAvailable;
     $scope.map;
     $scope.mapHeight = {"top":"52px","bottom":"0px" };
-    mapservices.getLatLong().then(function (position) {
-        console.log('postioncalled');
-        console.log(position);
-
-        myLat = position.coords.latitude;
-        myLng = position.coords.longitude;
-    });
+   
   
     setInterval(function () {
         $scope.getEventAvailable();
     }, 30000)
     $scope.getEventAvailable = function () {
+        console.log('called')
         firebaseservices.getDataWhereEqualTo("Events", localStorage.getItem('UserId'), 'CreatedBy').then(function (res) {
+            console.log('called')
             angular.forEach(res, function (value, key) {
+                console.log(value)
                 if (!value.isExpired) {
                      $ionicLoading.hide();
                     console.log("not expired **********");
@@ -70,6 +69,7 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
                         $scope.myEvent.emoji = value.photoUrl.replace('./', '');
                         console.log(value);
                         $rootScope.watchPosition(value.key);
+                        console.log('called')
                         firebaseservices.getDataFromNodeValue('Users/' + value.CreatedBy).then(function (suc) {
                             $scope.myEvent.userImage = suc.PhotoUrl;
                             $scope.myEvent.Name = suc.Name;
@@ -77,7 +77,7 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
 
                         })
                         $scope.joinedPeople = [];
-                      
+                        console.log('called')
                         angular.forEach(value.PeopleJoined, function (value, key) {
                             firebaseservices.getDataFromNodeValue('Users/' + key).then(function (user) {
                                 if (key != 'key') {
@@ -88,19 +88,21 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
                                 })
                             
                         })
-                        }   
+                        }
+                        console.log('called')
                         $scope.eventOpen = true;
                         $scope.currentPage = $scope.pages[$scope.currentPageIndex]
                         //$scope.createMapAfterCheckingEvents();
                     }
                 } else {
+                    console.log('called')
                     $ionicLoading.hide();
                    
                 }
             })
         })
     }
-    $scope.getEventAvailable();
+   
    
     $scope.currentPageIndex = 0;
     $scope.pages = ['menu','location','chooseEvents','createdEvents'];
@@ -124,20 +126,80 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
         $scope.currentPage = 'createdEvents';
         $ionicSlideBoxDelegate.update()
     }
-   // $scope.createMapAfterCheckingEvents = function () {
+        // $scope.createMapAfterCheckingEvents = function () {
+    $scope.isJoinedInEvent = false;
+    $scope.getUserJoinedInEvent = function () {
+        var defer = $q.defer();
+        console.log('called')
+        firebaseservices.getDataWhereEqualTo('Users/' + localStorage.getItem('UserId') + '/joinedEvent', true, 'isJoinedInEvent').then(function (suc) {
+            $scope.isJoinedInEvent = suc[0].isJoinedInEvent;
+            console.log('called')
+            firebaseservices.getDataFromNodeValue('Events/' + suc[0].eventId).then(function (success) {
+                console.log('called')
+            $scope.mapHeight = { "top": "52px", "bottom": "107px" };
+            $scope.currentPageIndex = 3;
+            $scope.currentPage = $scope.pages[$scope.currentPageIndex]
+           // if ($scope.execution) {
+             //   $scope.execution = false;
+                $scope.myEvent = {};
+                // $scope.markerDetails = marker.get("markerDetails");
+                $scope.myEvent.eventImage = success.eventPhoto;
+                $scope.myEvent.key = success.key;
+                $scope.myEvent.eventDetail = success.eventDetail;
+                $scope.myEvent.distance = (mapservices.distanceBetweenTwoLatLong(success.Latitude, success.Longitude, myLat, myLng, 'km')).toFixed(1);
+                $scope.myEvent.timeCreated = ((new Date().getTime() - success.CreatedTime) / (1000 * 60)).toFixed(0);
+                $scope.myEvent.emoji = success.photoUrl.replace('./', '');
+                console.log(success);
+               // $rootScope.watchPosition(success.key);
+                firebaseservices.getDataFromNodeValue('Users/' + success.CreatedBy).then(function (suc) {
+                    $scope.myEvent.userImage = suc.PhotoUrl;
+                    $scope.myEvent.Name = suc.Name;
 
+
+                })
+                $scope.joinedPeople = [];
+                      
+                angular.forEach(success.PeopleJoined, function (value, key) {
+                    firebaseservices.getDataFromNodeValue('Users/' + key).then(function (user) {
+                        if (key != 'key') {
+                            $scope.joinedPeople.push(user);
+
+                        }
+                        console.log($scope.joinedPeople);
+                    })
+                            
+                })
+                defer.resolve(success);
+            }, function (er) {
+                defer.resolve(er)
+            })
+           
+            defer.resolve(suc)
+        }, function (er) {
+            defer.resolve(er)
+        })
+        setTimeout(function () {
+
+        defer.resolve('asdf')
+        }, 2000)
+        console.log('called');
+      return  defer.promise;
+    }
     mapservices.getLatLong().then(function (position) {
         console.log('postioncalled');
         console.log(position);
        
         myLat = position.coords.latitude;
         myLng = position.coords.longitude;
-       
+        
+        $scope.getEventAvailable();
      //   console.log($scope.events);
         $scope.myLatitude=position.coords.latitude;
         $scope.myLongitude = position.coords.longitude;
-       
+        $scope.getUserJoinedInEvent().then(function (suc) {
+            console.log('called')
         $scope.createMap(myLat, myLng);
+        })
         var request = {
             'position': { "lat": $scope.myLatitude, "lng": $scope.myLongitude }
         };
@@ -179,6 +241,8 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
     }
        
     $scope.createMap = function (lat, lng) {
+        console.log('called')
+        $ionicLoading.hide();
         document.addEventListener("deviceready", function () {
             var div = document.getElementById('map');
             //if (!angular.isUndefined(map))
@@ -219,18 +283,22 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
                     firebaseObj = firebaseRef.child('Events/' + key);
                     var obj = $firebaseObject(firebaseObj)
                     obj.$loaded(function (res) {
-                       
+                        var eveData = res;
+                        eveData.key = key;
                         if (!res.isExpired ) {
-                            var eveData = res;
-                            eveData.key = key;
+                           
+                          
                             $scope.events.push(eveData);
-                            if (res.CreatedBy==localStorage.getItem('UserId')) {
-
+                           
                                 $scope.addMarker(eveData);
-                            }
-                            else {
-                                $scope.addMarker(eveData);
-                            }
+                          //  }
+                       // else
+                        //{
+                              //  $scope.addMarker(eveData);
+                          //  }
+                        } else if (!$scope.eventOpen && !$scope.isJoinedInEvent) {
+                            $scope.events.push(eveData);
+                            $scope.addMarker(eveData);
                         }
                         //deferred.resolve(events);
 
@@ -384,7 +452,7 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
             // mapservices.mapClikable(false,'map');
              $scope.map.clear();
              // $scope.map.off();
-            $scope.addMarker({ Latitude: $scope.myLatitude, Longitude: $scope.myLongitude, eventDetail: 'location', photoUrl: './img/destinationpin.png' });
+             $scope.addMarker({ Latitude: $scope.myLatitude, Longitude: $scope.myLongitude, eventDetail: 'location',isTapable:'location', photoUrl: './img/destinationpin.png' });
            
            
         }
@@ -424,7 +492,7 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
 
         if ($scope.currentPageIndex == 1) {
             $scope.map.clear();
-            $scope.addMarker({ Latitude: $scope.myLatitude, Longitude: $scope.myLongitude, eventDetail: 'location', photoUrl: './img/destinationpin.png' });
+            $scope.addMarker({ Latitude: $scope.myLatitude, Longitude: $scope.myLongitude, isTapable: 'location', eventDetail: 'location', photoUrl: './img/destinationpin.png' });
             $scope.map.setClickable(false);
         } else if ($scope.currentPageIndex == 2) {
             $scope.map.clear();
@@ -482,6 +550,7 @@ open2.controller('menuCtrl', function ($scope, $rootScope,$ionicLoading,firebase
         data[localStorage.getItem('UserId')]=true;
 
         firebaseservices.setDataToNode('Events/' + id + '/PeopleJoined', data)
+        firebaseservices.addDataToArray('Users/' + localStorage.getItem('UserId') + '/joinedEvent', { eventId: id, isJoinedInEvent: true })
     }
 
     $scope.closeModalAccept = function () {
