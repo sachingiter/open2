@@ -346,7 +346,24 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
                 });
                 geoQuery.on("key_exited", function (key, location, distance) {
                     console.log(key + " exited query to " + location + " (" + distance + " km from center)");
+                    
                     //  console.log(task)
+                    $scope.map.clear();
+                    angular.forEach($scope.events,function(value,key1){
+
+                        if(value.key == key){
+                            $scope.currentPageIndex = 0;
+                             navigator.geolocation.clearWatch($scope.watchID);
+                          $scope.mapHeight = { "top": "52px", "bottom": "0px" };
+
+                          $scope.currentPage = $scope.pages[0];
+
+                            $scope.events.splice(key1);
+                        }else {
+
+                            $scope.addMarker(value);
+                        }
+                    });
                     //angular.forEach(events, function (i, j) {
                     //    if (i.$id == key) {
                     ////        events.splice(j, 1);
@@ -522,14 +539,13 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
     }
 
     $scope.dropOut = function(eventDetail){
+                    // $scope.currentPageIndex = 0;
+                    $scope.closeModal();
                 if(localStorage.getItem('UserId') == eventDetail.createdBy){
                     console.log("Event created by logged-in user!!");
                     firebaseservices.updateData('Events', eventDetail.key, { isExpired: true }).then(function(){
                          console.log("insde UpdateData removeDataFromNodesuccess!!");
-                          navigator.geolocation.clearWatch($scope.watchID);
-                          $scope.mapHeight = { "top": "52px", "bottom": "0px" };
-                          $scope.currentPage = $scope.pages[0];
-
+                         
                           firebaseservices.removeDataFromNode('EventsLocation/' + eventDetail.key);
                           firebaseservices.removeDataFromNode('Events/' + eventDetail.key + '/PeopleJoined/');
                           angular.forEach(eventDetail.PeopleJoined, function (value, key) {                     
@@ -621,7 +637,7 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
         data[localStorage.getItem('UserId')]=true;
 
         firebaseservices.setDataToNode('Events/' + id + '/PeopleJoined', data)
-        firebaseservices.addDataToArray('Users/' + localStorage.getItem('UserId') + '/joinedEvent', { eventId: id, isJoinedInEvent: true })
+        firebaseservices.setDataToNode('Users/' + localStorage.getItem('UserId') + '/joinedEvent/' + id, { eventId: id, isJoinedInEvent: true })
     }
 
     $scope.closeModalAccept = function () {
