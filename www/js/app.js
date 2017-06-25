@@ -80,7 +80,29 @@ open2.run(function ($ionicPlatform, $cordovaGeolocation, $state, $firebaseAuth) 
            // error
        });
 
-        }, false);
+         }, false);
+         if (ionic.Platform.isWebView()) {
+
+             // FCMPlugin.onTokenRefresh(function (token) {
+
+             //     localStorage.setItem('token', token);
+             //     //firebaseRef.child('Users/'+localStorage.getItem('UserId'))
+             // });
+             // FCMPlugin.onNotification(function (data) {
+             //     if (data.wasTapped) {
+             //         //Notification was received on device tray and tapped by the user.
+             //         // alert(JSON.stringify(data));
+             //     } else {
+             //         //Notification was received in foreground. Maybe the user needs to be notified.
+             //         // alert(JSON.stringify(data));
+             //     }
+             // });
+             // FCMPlugin.getToken(function (token) {
+             //     localStorage.setItem('token', token);
+             //     // alert(token);
+             //     //return token;
+             // })
+         }
 
          
         if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -137,8 +159,8 @@ open2.config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider)
 
     .state('appfeedback', {
         url: '/appfeedback',
-        templateUrl: 'templates/appfeedback.html'
-
+        templateUrl: 'templates/appfeedback.html',
+        controller: 'feedBackCtrl'
 
     })
 

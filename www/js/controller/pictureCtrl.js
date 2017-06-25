@@ -96,7 +96,7 @@ open2.controller('pictureCtrl', function ($scope, $rootScope,firebaseservices, $
             // $scope.currentPageIndex--;
             CameraPreview.stopCamera();
             $rootScope.watchPosition(res);
-
+            $rootScope.recreateMap();
             $state.go('menu');
         })
     }

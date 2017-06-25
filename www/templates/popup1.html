@@ -11,16 +11,16 @@
                     <p style="text-align: center;font-size: 20px;
     color: grey;">Do you want to drop out of {{myEvent.eventDetail}}</p><center style="width: 100%;"><img ng-src="{{myEvent.emoji}}" width="50" height="50" /></center>
                 </div>
-                <div class="drop-btn" ng-show="isShown" ng-click="dropOut(myEvent.key)"><p>Drop Out</p></div>
+                <div class="drop-btn" ng-show="isShown" ng-click="dropOut(myEvent)"><p>Drop Out</p></div>
               
 
 
-                <div class="mes" style="margin-top: 50px;padding-bottom:30px;padding-left: 16px;padding-right: 16px;" ng-show="!isShown">
+                <div class="mes" style="margin-top: 65px;padding-bottom:15px;padding-left: 16px;padding-right: 16px;" ng-show="!isShown">
                     <p style="text-align: center;font-size: 20px;color:grey;">Rate This User</p>
                     <textarea placeholder="Type details here"></textarea>
                 </div>
                 <div class="drop-btn1" ng-show="!isShown"><p>Report</p></div>
-                <a><img src="img/back.png" ng-click="closeModal()" style="position: absolute;/* height: 10px; */left: -20px;" /></a>
+                <a><img src="img/back.png" ng-click="(isShown==false ? isShown=!isShown : closeModal())" style="position: absolute;/* height: 10px; */left: -20px;" /></a>
             </div>
            
            

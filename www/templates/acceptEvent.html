@@ -19,7 +19,7 @@
                     <textarea placeholder="Type details here"></textarea>
                 </div>
                 <div class="drop-btn1" ng-show="!isShown"><p>Report</p></div>
-                <a><img src="img/back.png" ng-click="closeModalAccept()" style="position: absolute;/* height: 10px; */left: -20px;" /></a>
+                <a><img src="img/back.png" ng-click="(isShown==false ? isShown=!isShown : closeModalAccept())" style="position: absolute;/* height: 10px; */left: -20px;" /></a>
             </div>
 
 
