@@ -49,6 +49,10 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
                         firebaseservices.updateData('Events', $scope.isEventAvailable.key, { isExpired: true });
                         $scope.currentPageIndex = 0;
                         firebaseservices.removeDataFromNode('EventsLocation/' + $scope.isEventAvailable.key);
+                        angular.forEach(value.PeopleJoined, function (value, key) {
+                            firebaseservices.updateData('Users', key + '/joinedEvent/' + $scope.isEventAvailable.key, { isJoinedInEvent :false})
+                        })
+                      firebaseservices.updateData('Users')
                        // $scope.watchID.clear();
                         navigator.geolocation.clearWatch($scope.watchID);
                         $scope.mapHeight = { "top": "52px", "bottom": "0px" };
@@ -138,15 +142,18 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
         var defer = $q.defer();
         console.log('called')
         firebaseservices.getDataWhereEqualTo('Users/' + localStorage.getItem('UserId') + '/joinedEvent', true, 'isJoinedInEvent').then(function (suc) {
-            $scope.isJoinedInEvent = suc[0].isJoinedInEvent;
+            $scope.isJoinedInEvent = suc[suc.length-1].isJoinedInEvent;
             console.log('called')
-            firebaseservices.getDataFromNodeValue('Events/' + suc[0].eventId).then(function (success) {
+          //  alert(JSON.stringify(suc[suc.length-1]))
+            firebaseservices.getDataFromNodeValue('Events/' + suc[suc.length - 1].eventId).then(function (success) {
                 console.log('called')
+            //    alert(JSON.stringify(success))
+                if (success.expireTime >= new Date().getTime()) {
+
             $scope.mapHeight = { "top": "52px", "bottom": "107px" };
             $scope.currentPageIndex = 3;
             $scope.currentPage = $scope.pages[$scope.currentPageIndex]
-           // if ($scope.execution) {
-             //   $scope.execution = false;
+          
                 $scope.myEvent = {};
                 // $scope.markerDetails = marker.get("markerDetails");
                 $scope.myEvent.eventImage = success.eventPhoto;
@@ -176,6 +183,9 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
                             
                 })
                 defer.resolve(success);
+                } else {
+                    firebaseservices.updateData('Events',  success.key, { isExpired: true });
+                }
             }, function (er) {
                 defer.resolve(er)
             })
@@ -379,6 +389,7 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
                             $scope.events[i].Latitude = location[0];
                             $scope.events[i].Longitude = location[1];
                         }
+                        if(!$scope.events[i].isExpired)
                         $scope.addMarker($scope.events[i]);
                     }
                    // alert(key + " moved within query to " + location + " (" + distance + " km from center)");
@@ -750,12 +761,14 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
 
 
 
+
             scope.closeModal = function () {
                 console.log("Close Modal ******************");
                 if (!ionic.Platform.isWebView()) {
                     console.log("is not WebView");
 
-                } else {
+        } else {
+
 
                     if(scope.bg_text == 'Experience Details'){
                         console.log("setClickable true");
@@ -769,6 +782,7 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
             };
 
             
+
 
 
             $ionicModal.fromTemplateUrl('views/navmodal.html', {
