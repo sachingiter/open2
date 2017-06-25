@@ -144,8 +144,10 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
         firebaseservices.getDataWhereEqualTo('Users/' + localStorage.getItem('UserId') + '/joinedEvent', true, 'isJoinedInEvent').then(function (suc) {
             $scope.isJoinedInEvent = suc[suc.length-1].isJoinedInEvent;
             console.log('called')
+          //  alert(JSON.stringify(suc[suc.length-1]))
             firebaseservices.getDataFromNodeValue('Events/' + suc[suc.length - 1].eventId).then(function (success) {
                 console.log('called')
+            //    alert(JSON.stringify(success))
                 if (success.expireTime >= new Date().getTime()) {
 
             $scope.mapHeight = { "top": "52px", "bottom": "107px" };
