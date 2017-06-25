@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
  
-var open2 = angular.module('starter', ['ionic','fbservice.factory', 'ngCordova','cordovacameraservice.module','firebaseservices.factory','ion-google-autocomplete', 'mapservices.factory', 'firebase']);
+var open2 = angular.module('starter', ['ionic','fbservice.factory', 'ngCordova','firebaseservices.factory','ion-google-autocomplete', 'mapservices.factory', 'firebase']);
 
 open2.run(function ($ionicPlatform, $cordovaGeolocation, $state, $firebaseAuth) {
     var config = {
@@ -119,6 +119,7 @@ open2.run(function ($ionicPlatform, $cordovaGeolocation, $state, $firebaseAuth) 
                  windows: {}
              });
 
+
              push.on('registration', function (data) {
                  // data.registrationId
                //  alert(data.registrationId)
@@ -138,6 +139,26 @@ open2.run(function ($ionicPlatform, $cordovaGeolocation, $state, $firebaseAuth) 
                  // e.message
                  alert(e.message)
              });
+
+             // FCMPlugin.onTokenRefresh(function (token) {
+
+             //     localStorage.setItem('token', token);
+             //     //firebaseRef.child('Users/'+localStorage.getItem('UserId'))
+             // });
+             // FCMPlugin.onNotification(function (data) {
+             //     if (data.wasTapped) {
+             //         //Notification was received on device tray and tapped by the user.
+             //         // alert(JSON.stringify(data));
+             //     } else {
+             //         //Notification was received in foreground. Maybe the user needs to be notified.
+             //         // alert(JSON.stringify(data));
+             //     }
+             // });
+             // FCMPlugin.getToken(function (token) {
+             //     localStorage.setItem('token', token);
+             //     // alert(token);
+             //     //return token;
+             // })
 
          }
 

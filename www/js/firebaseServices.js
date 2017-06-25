@@ -24,7 +24,7 @@ angular.module('firebaseservices.factory', []).factory('firebaseservices', ['$q'
                    // AppliedTasks: [{ AppliedTask: true }],
                     CreatedAt: new Date().getTime(),
                     Email: email,
-                    notificationToken: localStorage.getItem('token'),
+                    // notificationToken: localStorage.getItem('token'),
                     FlaggedCount: 0,
                     InvitationDeepLink: 0,
                     InvitedByUserID: "invitedbyID",

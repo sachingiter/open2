@@ -8,6 +8,6 @@ open2.controller('feedBackCtrl', function ($scope, $rootScope, $http, $state, fi
         var mail = JSON.parse(localStorage.getItem('myDetails'));
        // alert();
         firebaseservices.addDataToArray('UserNotifications/' + localStorage.getItem('UserId'), { senderMailId: data.senderMail, text: data.text })
-        $state.go('menu')
+        $state.go('menu');
     }
 });
