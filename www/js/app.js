@@ -122,6 +122,7 @@ open2.run(function ($ionicPlatform, $cordovaGeolocation, $state, $firebaseAuth) 
 
              push.on('registration', function (data) {
                  // data.registrationId
+                 localStorage.setItem('token', data.registrationId);
                //  alert(data.registrationId)
              });
 
@@ -132,12 +133,12 @@ open2.run(function ($ionicPlatform, $cordovaGeolocation, $state, $firebaseAuth) 
                  // data.sound,
                  // data.image,
                  // data.additionalData
-                 alert(data)
+               //  alert(data)
              });
 
              push.on('error', function (e) {
                  // e.message
-                 alert(e.message)
+               //  alert(e.message)
              });
 
              // FCMPlugin.onTokenRefresh(function (token) {

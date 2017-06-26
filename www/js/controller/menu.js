@@ -9,9 +9,11 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
     $scope.isShown1 = false;
     $scope.backTemplates = true;
     $scope.profileShow = false;
+    $scope.select = {};
+    $scope.select.selectedText = 0;
     $scope.bg_text = "Experience Details";
     $scope.backArrow = false;
-    $scope.messageTemplates = ["I'm here!", "Sorry, cant't make it!", "On my way!", "On your way?"];
+    $scope.messageTemplates = [{text:"I'm here!",id:1}, {text:"Sorry, cant't make it!",id:2}, {text:"On my way!",id:3}, {text:"On your way?",id:4}];
     $scope.events = [];
     $ionicPlatform.ready(function () {
         var firebaseRef = firebase.database().ref();
@@ -184,7 +186,7 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
                 })
                 defer.resolve(success);
                 } else {
-                    firebaseservices.updateData('Events',  success.key, { isExpired: true });
+                   // firebaseservices.updateData('Events',  success.key, { isExpired: true });
                 }
             }, function (er) {
                 defer.resolve(er)
@@ -683,7 +685,18 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
         }
         $scope.backTemplates = !$scope.backTemplates; $scope.backArrow = !$scope.backArrow; $scope.bg_text = 'Select a message to send'
     }
+    $scope.sendNotification = function () {
+        alert('notify');
+        console.log($scope.joinedPeople)
+        angular.forEach($scope.joinedPeople,function(value,key){
+            firebaseservices.getDataFromNodeValue('Users/' + value.key + '/NotificationEnabled/Message').then(function (res) {
+                if (res) {
 
+                    firebaseservices.addDataToArray('UserPushNotification/' + value.key, { SenderId: localStorage.getItem('UserId'), message: $scope.messageTemplates[$scope.select.selectedText - 1].text })
+                }
+            })
+        })
+    }
     $scope.feedback = function () {
         $state.go('feedback');
     }
