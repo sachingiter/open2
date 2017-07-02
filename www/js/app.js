@@ -8,9 +8,9 @@ var open2 = angular.module('starter', ['ionic','fbservice.factory', 'ngCordova',
 
 open2.run(function ($ionicPlatform, $cordovaGeolocation, $state, $firebaseAuth) {
     var config = {
-        apiKey: "AIzaSyDRCV9GSpYNm4Odlwbm1Us1g86safXCMLg",               // Your Firebase API key
-        authDomain: "open2-133c3.firebaseio.com",       // Your Firebase Auth domain ("*.firebaseapp.com")
-        databaseURL: "https://open2-133c3.firebaseio.com/"     // Your Firebase Database URL ("https://*.firebaseio.com")
+        apiKey: "AIzaSyBocVuT5r7cxX27CoDs4RqlLdrxtC8poyo",               // Your Firebase API key
+        authDomain: "open2-2d22c.firebaseio.com",       // Your Firebase Auth domain ("*.firebaseapp.com")
+        databaseURL: "https://open2-2d22c.firebaseio.com/"     // Your Firebase Database URL ("https://*.firebaseio.com")
         //   storageBucket: "<STORAGE_BUCKET>"  // Your Cloud Storage for Firebase bucket ("*.appspot.com")
     };
     firebase.initializeApp(config);

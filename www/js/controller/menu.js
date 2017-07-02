@@ -39,6 +39,7 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
 
         firebaseservices.getDataWhereEqualTo("Events", localStorage.getItem('UserId'), 'CreatedBy').then(function (res) {
             console.log('called')
+           // alert(JSON.stringify(res));
             angular.forEach(res, function (value, key) {
                 console.log(value)
                 if (!value.isExpired) {
@@ -115,7 +116,7 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
             })
         })
     }
-   
+    $scope.getEventAvailable();
     $scope.currentPageIndex = 0;
     $scope.pages = ['menu','location','chooseEvents','createdEvents'];
     $scope.currentPage = 'menu';
@@ -149,7 +150,7 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
           //  alert(JSON.stringify(suc[suc.length-1]))
             firebaseservices.getDataFromNodeValue('Events/' + suc[suc.length - 1].eventId).then(function (success) {
                 console.log('called')
-            //    alert(JSON.stringify(success))
+              //  alert(JSON.stringify(success))
                 if (success.expireTime >= new Date().getTime()) {
 
             $scope.mapHeight = { "top": "52px", "bottom": "107px" };
@@ -213,7 +214,7 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
         myLat = position.coords.latitude;
         myLng = position.coords.longitude;
         
-        $scope.getEventAvailable();
+      
      //   console.log($scope.events);
         $scope.myLatitude=position.coords.latitude;
         $scope.myLongitude = position.coords.longitude;
@@ -235,7 +236,7 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
                     subLocatoin = respo.subLocality;
                 }
                 $scope.currentLocation = subLocatoin + ', ' + respo.locality + ', ' + respo.adminArea;
-                $scope.getEventAvailable();
+               // $scope.getEventAvailable();
             } else {
                 console.log("inside mapservices.getLocationName respo else  :: ");
                 $scope.getLocationName(request);
@@ -273,7 +274,7 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
                 }
 
             $scope.currentLocation = subLocatoin + ', ' + respo.locality + ', ' + respo.adminArea;
-            $scope.getEventAvailable();
+          //  $scope.getEventAvailable();
             } else {
                 console.log("inside $scope.getLocationName respo else :: ");
                 $scope.getLocationName(request);
@@ -686,7 +687,7 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
         $scope.backTemplates = !$scope.backTemplates; $scope.backArrow = !$scope.backArrow; $scope.bg_text = 'Select a message to send'
     }
     $scope.sendNotification = function () {
-        alert('notify');
+       // alert('notify');
         console.log($scope.joinedPeople)
         angular.forEach($scope.joinedPeople,function(value,key){
             firebaseservices.getDataFromNodeValue('Users/' + value.key + '/NotificationEnabled/Message').then(function (res) {
@@ -716,7 +717,7 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
         $ionicSlideBoxDelegate.update()
     }
     $scope.firstFooterShow = function () {
-        $scope.backTemplates = true; $scope.backArrow = false; $scope.profileShow = false; $scope.bg_text = 'Experience Details';
+        $scope.backTemplates = true; $scope.backArrow = false; $scope.profileShow = false; $scope.bg_text = 'Experience Details'; $scope.select.selectedText = 0;
         if (ionic.Platform.isWebView()) {
 
             $scope.map.setClickable(true);

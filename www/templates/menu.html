@@ -1,4 +1,4 @@
-<ion-view>
+﻿<ion-view>
     <ion-header-bar align-title="center" class="bar-clear" style="height:80px;padding:0px" ng-show="currentPage=='menu'">
 
         <div class="header-cls" style="text-align:center;width: 100vw;height:80px">
@@ -95,7 +95,7 @@
       
     </ion-footer-bar>-->
     <div class="bar bar-footer bar-footer-cls" ng-show="currentPage=='createdEvents'">
-     <span class="back-img" ng-show="backArrow" ng-click="firstFooterShow()"><img src="img/back.png"/></span>
+     <span class="back-img" ng-show="backArrow" ng-click="firstFooterShow();"><img src="img/back.png"/></span>
         <p class="bg-img-txt" ng-show="(select.selectedText==0)">{{bg_text}}{{select.selectedText}}</p>
         <p class="bg-img-txt" ng-click="sendNotification()" ng-show="(select.selectedText>0)">Send Message <i class="icon ion-android-send"></i></p>
         <div class="row text-center background_footer" ng-show="backTemplates&&!profileShow">
