@@ -446,8 +446,14 @@ function (error) {
             });
             return defer.promise;
         },
-        setDataToNode: function (node,data) {
-            firebaseRef.child(node).update(data);
+        setDataToNode: function (node, data) {
+            var defer = $q.defer();
+            firebaseRef.child(node).update(data).then(function (res) {
+                defer.resolve(res);
+            }, function (f) {
+                defer.reject(f);
+                });
+            return defer.promise;
         },
         removeDataFromNode: function (node) {
             firebaseRef.child(node).remove();

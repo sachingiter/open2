@@ -49,7 +49,7 @@
 
     </ion-header-bar>
     <ion-content ng-style="mapHeight">
-            <div class="container-fluid p0" id="map" style="height:100%;position:relative;" ng-click="map.setClickable(true)">
+            <div class="container-fluid p0" id="map" style="height:100%;position:relative;">
                
                 <div class="" ng-show="currentPage=='location'">
                     <center>
@@ -109,7 +109,7 @@
         </div>
         <div class="text-center background_footer"  ng-show="!backTemplates">
             <div  style="margin-top:15px;text-align:center;">
-                <p ng-repeat="templates in messageTemplates" ng-class="(select.selectedText==templates.id)?'template-message':'template-message-opaque'" ng-click="select.selectedText=templates.id">{{templates.text}} {{select.selectedText}}{{templates.id}} </p>
+                <p ng-repeat="templates in messageTemplates" ng-class="(select.selectedText==templates.id)?'template-message':'template-message-opaque'" ng-click="select.selectedText=templates.id">{{templates.text}}</p>
             </div>
            
         </div>

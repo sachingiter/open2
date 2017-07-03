@@ -1,4 +1,4 @@
-// Ionic Starter App
+﻿// Ionic Starter App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
@@ -82,64 +82,65 @@ open2.run(function ($ionicPlatform, $cordovaGeolocation, $state, $firebaseAuth) 
 
          }, false);
          if (ionic.Platform.isWebView()) {
-             //window.FirebasePlugin.getToken(function (token) {
-             //    // save this server-side and use it to push notifications to this device
-             //    console.log(token);
-             //}, function (error) {
-             //    console.error(error);
-             //});
-             //window.FirebasePlugin.onTokenRefresh(function (token) {
-             //    // save this server-side and use it to push notifications to this device
-             //    console.log(token);
-             //}, function (error) {
-             //    console.error(error);
-             //});
-             //window.FirebasePlugin.onNotificationOpen(function (notification) {
-             //    console.log(notification);
-             //}, function (error) {
-             //    console.error(error);
-             //});
-             var push = PushNotification.init({
-                 //
-                   //  android: { senderID: "12345679" }, //correct id
-                   //  ios: { alert: "true", badge: true, sound: 'false' },
-                     //windows: {}
+             window.FirebasePlugin.getToken(function (token) {
+                 // save this server-side and use it to push notifications to this device
+                 console.log(token);
+                 localStorage.setItem('token', token);
+             }, function (error) {
+                 console.error(error);
+             });
+             window.FirebasePlugin.onTokenRefresh(function (token) {
+                 // save this server-side and use it to push notifications to this device
+                 localStorage.setItem('token', token);
+             }, function (error) {
+                 console.error(error);
+             });
+             window.FirebasePlugin.onNotificationOpen(function (notification) {
+                 console.log(notification);
+             }, function (error) {
+                 console.error(error);
+             });
+             //var push = PushNotification.init({
+             //    //
+             //      //  android: { senderID: "12345679" }, //correct id
+             //      //  ios: { alert: "true", badge: true, sound: 'false' },
+             //        //windows: {}
                  
-                 android: {
-                     senderID: "584274948676"
-                 },
-                 browser: {
-                     pushServiceURL: 'http://push.api.phonegap.com/v1/push'
-                 },
-                 ios: {
-                     alert: "true",
-                     badge: "true",
-                     sound: "true"
-                 },
-                 windows: {}
-             });
+             //    android: {
+             //        senderID: "471713500862"
+             //    },
+             //    browser: {
+             //        pushServiceURL: 'http://push.api.phonegap.com/v1/push'
+             //    },
+             //    ios: {
+             //        alert: "true",
+             //        badge: "true",
+             //        sound: "true"
+             //    },
+             //    windows: {}
+             //});
 
 
-             push.on('registration', function (data) {
-                 // data.registrationId
-                 localStorage.setItem('token', data.registrationId);
-               //  alert(data.registrationId)
-             });
+             //push.on('registration', function (data) {
+             //    // data.registrationId
+             //    localStorage.setItem('token', data.registrationId);
+             //  //  alert(data.registrationId)
+             //});
 
-             push.on('notification', function (data) {
-                 // data.message,
-                 // data.title,
-                 // data.count,
-                 // data.sound,
-                 // data.image,
-                 // data.additionalData
-               //  alert(data)
-             });
+             //push.on('notification', function (data) {
+             //    // data.message,
+             //    // data.title,
+             //    // data.count,
+             //    // data.sound,
+             //    // data.image,
+             //    // data.additionalData
+             //  //  alert(data)
+             //});
 
-             push.on('error', function (e) {
-                 // e.message
-               //  alert(e.message)
-             });
+             //push.on('error', function (e) {
+             //    // e.message
+             //  //  alert(e.message)
+             //});
 
              // FCMPlugin.onTokenRefresh(function (token) {
 
@@ -211,8 +212,8 @@ open2.config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider)
 
     .state('notification', {
         url: '/notification',
-        templateUrl: 'templates/notification.html'
-
+        templateUrl: 'templates/notification.html',
+        controller:'notificationCtrl'
 
     })
 

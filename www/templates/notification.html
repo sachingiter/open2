@@ -1,4 +1,4 @@
-<ion-view class="bg_img_blue">
+﻿<ion-view class="bg_img_blue">
 <ion-content>
 <div class="text-center logo2"><img src="img/o2-logo.png"/></div>
 <div class="text-center">
@@ -15,7 +15,7 @@
      When Some one joins your Open2
 
      <label class="toggle ">
-       <input type="checkbox">
+       <input type="checkbox" ng-model="data.Join" ng-change="updateNotification('Join')">
        <div class="track" style="border-color: white;background-color: white;">
          <div class="handle" style="background-color: #52d477;"></div>
        </div>
@@ -25,7 +25,7 @@
    <li class="item item-toggle" style="background: none;
     border: none;color: white;">
      When Some one drops out your Open2
-     <label class="toggle ">
+     <label class="toggle " ng-model="data.Drop" ng-change="updateNotification('Drop')">
        <input type="checkbox">
        <div class="track" style="border-color: white;background-color: white;">
          <div class="handle" style="background-color: #52d477;"></div>
@@ -39,7 +39,7 @@
 
 
      <label class="toggle ">
-       <input type="checkbox">
+       <input type="checkbox" ng-model="data.Cancel" ng-change="updateNotification('Cancel')">
        <div class="track" style="border-color: white;background-color: white;">
          <div class="handle" style="background-color: #52d477;"></div>
        </div>
@@ -50,7 +50,7 @@
     border: none;color: white;">
      When a message comes in.
      <label class="toggle ">
-       <input type="checkbox">
+       <input type="checkbox" ng-model="data.Message" ng-change="updateNotification('Message')">
        <div class="track" style="border-color: white;background-color: white;">
          <div class="handle" style="background-color: #52d477;"></div>
        </div>
@@ -61,7 +61,7 @@
     border: none;color: white;">
      When you get an approval thums up.
      <label class="toggle ">
-       <input type="checkbox">
+       <input type="checkbox" ng-model="data.Approval" ng-change="updateNotification('Approval')">
        <div class="track" style="border-color: white;background-color: white;">
          <div class="handle" style="background-color: #52d477;"></div>
        </div>
