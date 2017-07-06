@@ -82,7 +82,7 @@
     <plugin name="cordova-plugin-console" spec="^1.0.5" />
     <plugin name="cordova-plugin-device" spec="^1.1.4" />
     <plugin name="cordova-plugin-facebook4" spec="^1.9.0">
-        <variable name="APP_ID" value="578625762525303" />
+        <variable name="APP_ID" value="123165304922767" />
         <variable name="APP_NAME" value="Open2" />
     </plugin>
     <plugin name="cordova-plugin-geolocation" spec="^2.4.3" />
