@@ -6,7 +6,7 @@
     $scope.updateNotification = function (value) {
         var dat = {};
         dat[value] = !$scope.data[value]
-        firebaseservices.updateData('/Users/' + localStorage.getItem('UserId'), 'NotificationEnabled', dat).then(function (res) {
+        firebaseservices.updateData('/Users/' + localStorage.getItem('UserId'), '/NotificationEnabled', dat).then(function (res) {
 
         })
     }

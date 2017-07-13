@@ -23,6 +23,8 @@ angular.module('firebaseservices.factory', []).factory('firebaseservices', ['$q'
                   //  CreatedTasks: [{ CreatedTask: true }],
                    // AppliedTasks: [{ AppliedTask: true }],
                     CreatedAt: new Date().getTime(),
+                    CreatedEvents: true,
+                    joinedEvent: true,
                     Email: email,
                     notificationToken: localStorage.getItem('token'),
                    // FlaggedCount: 0,
@@ -429,7 +431,7 @@ function (error) {
                 console.log(dat.key);
 
             }, function (er) {
-                console.log('fire')
+                console.log('fire');
                 defer.reject(er);
             });
             return defer.promise;

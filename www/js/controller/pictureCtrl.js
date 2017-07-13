@@ -61,7 +61,7 @@
 
         }
         setTimeout(function () {
-
+         $ionicLoading.hide();
         $scope.init();
         }, 1000)
 
@@ -99,26 +99,31 @@
             $scope.imageURL = 'img/open2logo.jpg';
             $scope.next();
         }
+
         $scope.next = function () {
             //alert();
+
             var data = JSON.parse($stateParams.data);
+            console.log(data);
             data.eventPhoto = $scope.imageURL;
 
-            $ionicLoading.show({
-                template: '<ion-spinner icon="circles" class="spinner-calm"></ion-spinner>'
-            });
+           
           
             $rootScope.recreateMap();
-            setTimeout(function () {
+             // setTimeout(function () {
 
             firebaseservices.addDataToFirebase(data, 'Events').then(function (res) {
                 // $scope.currentPageIndex--;
-              
-                $rootScope.watchPosition(res);
+                console.log(res);
+               var data1={};
+               data1[res]={isEventLive:true};
+               //res.key:{}
+               firebaseservices.setDataToNode('Users/'+ localStorage.getItem('UserId')+'/CreatedEvents',data1)
+                // $rootScope.watchPosition(res);
                 $ionicLoading.hide();
                 $state.go('menu');
             })
-            }, 1000)
+             // }, 1000);
         }
         // $scope.init();
     });
