@@ -96,7 +96,7 @@ angular.module('mapservices.factory', []).factory('mapservices', ['$http', '$q',
         getLatLong: function () {
             var deferred = $q.defer();
             document.addEventListener("deviceready", function () {
-               var option = { timeout: 10000, enableHighAccuracy: false, maximumAge: 0};
+               var option = { timeout: 30000, enableHighAccuracy: false, maximumAge: 0};
                 $cordovaGeolocation
    .getCurrentPosition(option)
    .then(function (position) {

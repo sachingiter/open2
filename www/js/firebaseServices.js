@@ -70,8 +70,6 @@ angular.module('firebaseservices.factory', []).factory('firebaseservices', ['$q'
             var deferred = $q.defer();
             //  var ref = firebase.database().ref();
 
-
-
             var messagesRef = firebaseRef.child(node);
 
             var list = $firebaseArray(messagesRef);
@@ -85,13 +83,12 @@ angular.module('firebaseservices.factory', []).factory('firebaseservices', ['$q'
                // if (data.Address != 'virtual') {
                 geoFire.set(suc.key, [data.Latitude, data.Longitude]).then(function () {
                     // console.log("Provided key has been added to GeoFire");
-                    list = $firebaseArray(firebaseRef.child('Users/' + localStorage.getItem('UserId') + "/CreatedEvents"));
-                    console.log(list)
-                    list.$add({ CreatedEventId: suc.key });
+                    // list = $firebaseArray(firebaseRef.child('Users/' + localStorage.getItem('UserId') + "/CreatedEvents"));
+                    // console.log(list)
+                    // list.$add({ CreatedEventId: suc.key });
                     // messagesRef = firebaseRef.child('Users/' + localStorage.getItem('UserId')+"/CreatedTask").set({
                     // [suc.key]: {Conversations:true}
                     //});
-
 
                 }, function (error) {
                     console.log("Error: " + error);
@@ -102,7 +99,9 @@ angular.module('firebaseservices.factory', []).factory('firebaseservices', ['$q'
                     //console.log(list)
                    // list.$add({ CreatedTaskId: suc.key });
                // }
-                deferred.resolve(suc.key);
+                // = suc.val();
+               data.key = suc.key;
+                deferred.resolve(data);
             }, function (er) {
                 deferred.reject(er)
             });
@@ -259,11 +258,14 @@ angular.module('firebaseservices.factory', []).factory('firebaseservices', ['$q'
             //list.$save(2).then(function (ref) {
             //    ref.key === list[2].$id; // true
             //});
+
+             ref.update(dataToUpadate);
+
             ref.once('value', function (snap) {
                 var obj = snap.val();
                 console.log(obj);
                 // var snapRef = snap.ref();
-                ref.update(dataToUpadate);
+               
                 defer.resolve(obj);
             });
             return defer.promise;

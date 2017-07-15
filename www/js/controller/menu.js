@@ -1,4 +1,4 @@
-﻿
+
 open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,firebase,$firebaseObject,$stateParams,$ionicSlideBoxDelegate, $http,$ionicPlatform, $state,$cordovaSocialSharing,$cordovaFlashlight, mapservices, firebaseservices, $ionicModal) {
 
     // $scope.user = {};
@@ -229,7 +229,7 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
         console.log("res[0].isJoinedInEvent !== true IF");
       } else {
         console.log('res[0].isJoinedInEvent !== true ELSE :: ');
-       displayTab();
+       $scope.displayTab();
       }
       console.log("isJoinedInEvent Response : :: " + JSON.stringify(res));
 
@@ -240,14 +240,14 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
 
              
        firebaseservices.getDataWhereEqualTo("Users/" + localStorage.getItem('UserId') + '/CreatedEvents', true, 'isEventLive').then(function(res) {
-        console.log("inside eventStatus getDataWhereEqualTo CreatedEvents");
+        console.log("inside eventStatus getDataWhereEqualTo CreatedEvents  :  :  " + res[0].isJoinedInEvent);
         $ionicLoading.hide();
         if (res[0].isJoinedInEvent === true) {
              console.log("res[0].CreatedEvents !== true IF");
-            displayTab();
+            $scope.displayTab();
         }else {
              console.log('res[0].CreatedEvents !== true ELSE :: ');
-            hideTab();
+            $scope.hideTab();;
         }
         
         console.log("CreatedBy Response : :: " + JSON.stringify(res));
@@ -265,7 +265,8 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
 
   /****************  Get Current Postion of the User Code Starts *********************/
 
-    $scope.getLatlong = function(){
+    $scope.getLatlong = function()
+    {
         console.log('inside getLatLong function');
     mapservices.getLatLong().then(function (position) {
         console.log('getLatLong called');
@@ -428,12 +429,13 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
       
     }
 
-    function displayTab(){
+ $scope.displayTab = function (){
          $scope.mapHeight = { "top": "52px", "bottom": "107px" };
         $scope.currentPageIndex = 3;
         $scope.currentPage = $scope.pages[$scope.currentPageIndex]
     }
-     function hideTab() {
+  $scope.hideTab =  function () {
+        // alert("hideTab called");
          $scope.currentPageIndex = 0;
          $scope.mapHeight = { "top": "52px", "bottom": "0px" };
          $scope.currentPage = $scope.pages[$scope.currentPageIndex];
@@ -464,7 +466,7 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
                         $scope.expireTimeFun(res); 
                     },timeLeft);
                 }else {
-                    hideTab();
+                    $scope.hideTab();
                 }
                  
             
@@ -508,19 +510,22 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
 
     }
     $scope.EventsInfo = function(res) {
- $scope.event = {};
+        console.log("CreatedBy In EventsInfo ************8  " + JSON.stringify(res));
+ $scope.myEvent = {};
  
- $scope.event.eventImage = res.eventPhoto;
- $scope.event.eventDetail = res.eventDetail;
- $scope.event.distance = (mapservices.distanceBetweenTwoLatLong(res.Latitude, res.Longitude, $scope.myLatitude, $scope.myLongitude, 'km')).toFixed(1);
- $scope.event.timeCreated = ((new Date().getTime() - res.CreatedTime) / (1000 * 60)).toFixed(0);
- $scope.event.emoji = res.photoUrl.replace('./', '');
- $scope.event.key = res.key;
+ $scope.myEvent.eventImage = res.eventPhoto;
+ $scope.myEvent.eventDetail = res.eventDetail;
+ $scope.myEvent.distance = (mapservices.distanceBetweenTwoLatLong(res.Latitude, res.Longitude, $scope.myLatitude, $scope.myLongitude, 'km')).toFixed(1);
+ $scope.myEvent.timeCreated = ((new Date().getTime() - res.CreatedTime) / (1000 * 60)).toFixed(0);
+ $scope.myEvent.emoji = res.photoUrl.replace('./', '');
+ $scope.myEvent.key = res.key;
+ $scope.myEvent.CreatedBy = res.CreatedBy;
+ $scope.myEvent.expireTime = res.expireTime;
  console.log(res);
 
  firebaseservices.getDataFromNodeValue('Users/' + res.CreatedBy).then(function(suc) {
-  $scope.event.userImage = suc.PhotoUrl;
-  $scope.event.Name = suc.Name;
+  $scope.myEvent.userImage = suc.PhotoUrl;
+  $scope.myEvent.Name = suc.Name;
 
  });
 
@@ -532,23 +537,25 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
         firebaseservices.getDataFromNodeValue("Events/"+key).then(function(res){
             var eveData = res;
             var userId = localStorage.getItem('UserId');
-       eveData.key = key;
+            eveData.key = key;
        if (res.expireTime >= new Date().getTime()) {
 
         if(res.CreatedBy == userId  || res.PeopleJoined[userId]){
+            $rootScope.amIEventPart = res;
             $scope.isMyEvent = true;
              $scope.map.clear();
              $scope.addMarkerEvent(res,false);
-             displayTab();
+             $scope.displayTab()
              $scope.EventsInfo(res);
              $scope.eventTimeLeft(res);
+              $scope.getPeopleJoined(res);
 
         }else{
             // $scope.isMyEvent = false;
             if(!$scope.isMyEvent){
-                $scope.addMarkerEvent(res,true);
-                $scope.events.push(res);
+                $scope.addMarkerEvent(res,true);   
             }
+             $scope.events.push(res);
 
 
         }
@@ -568,13 +575,40 @@ open2.controller('menuCtrl', function ($scope,$q, $rootScope,$ionicLoading,fireb
         });
 
      }
+
       $scope.joinedPeople = [];
      $scope.getPeopleJoined=function(res){
-    firebaseRef.child('Events/'+res.key+'/isJoinedInEvent').on("child_added", function(snapshot, prevChildKey) {
-var data=snapshot.val();
-alert(data);
+        console.log("res res ::: ",res);
+    firebaseRef.child('Events/'+res.key+'/PeopleJoined').on("child_added", function(snapshot, prevChildKey) {
+    var data=res.key;
+    firebaseservices.getDataFromNodeValue('Users/' + snapshot.key).then(function (suc) {
+              suc.eventKey = data;
+                     $scope.joinedPeople.push(suc);   
+                     console.log("$scope.joinedPeople : ", $scope.joinedPeople);  
+                    });
+
+        // alert(data);
     });
+
+     firebaseRef.child('Events/'+res.key+'/PeopleJoined').on("child_removed", function(snapshot, prevChildKey) {
+    
+    // var data=snapshot.key;
+    angular.forEach($scope.joinedPeople,function(value,key){
+        if(res.key == value.eventKey){
+         $scope.joinedPeople.splice(key,1); 
+        }
+    })
+    // firebaseservices.getDataFromNodeValue('Users/' + data).then(function (suc) {
+                        
+                    // });
+        // alert(data);
+    });
+
+
      }
+
+   
+
        $scope.keyEntered = function(geoQuery){
        console.log("Inside keyEntered Function");
                 geoQuery.on("key_entered", function (key, location, distance) {
@@ -590,36 +624,20 @@ alert(data);
     /*************** Key Entered Event Code Ends ***************/
 
     $scope.keyExited = function(geoQuery){
+
                     geoQuery.on("key_exited", function (key, location, distance) {
+                        console.log("$scope.events ********** " + $scope.events);
                     console.log(key + " exited query to " + location + " (" + distance + " km from center)");
 
                     //  console.log(task)
-                     $scope.map.clear();
 
-                    angular.forEach($scope.events, function (value, key1) {
-                        console.log("value.key :::  ", value.$id, value['$id']);
-                        console.log("value.key ::: ****  ", value);
-                        console.log("key_exited key :: ", key);
-                        console.log("key_exited key :: ", key1);
-                        if (value.$id == key || value['$id'] == key) {
-                            $scope.currentPageIndex = 0;
-                            navigator.geolocation.clearWatch($scope.watchID);
-                            $scope.mapHeight = { "top": "52px", "bottom": "0px" };
-
-                            $scope.currentPage = $scope.pages[0];
-
-                            $scope.events.splice(key1,1);
-                        } else {
-                            console.log("key_exited key else :: " + key1);
-                            $scope.addMarker(value);
-                        }
-                    });
-                    //angular.forEach(events, function (i, j) {
+                    $scope.dropFromToEvent(false,key);
+                    // angular.forEach(events, function (i, j) {
                     //    if (i.$id == key) {
-                    ////        events.splice(j, 1);
+                    // //        events.splice(j, 1);
                     //    }
-                    //})
-                    //deferred.resolve(events);
+                    // })
+                    // deferred.resolve(events);
                 });
 
    }
@@ -639,6 +657,49 @@ alert(data);
                    // alert(key + " moved within query to " + location + " (" + distance + " km from center)");
                 });
    }
+
+    $scope.dropFromToEvent= function (isSingleEvent,key){
+                     if(key == $rootScope.amIEventPart.key){
+                     $scope.map.clear();
+                     $scope.hideTab();
+
+                    angular.forEach($scope.events, function (value, key1) {
+                         console.log("value.key ::: ****  ", value);
+                        console.log("value.key :::  ", value.$id, value['$id']);
+                        var currentTime =  new Date().getTime();
+                        if(value.expireTime < currentTime){
+                              $scope.events.splice(key1,1);
+                          }else {
+                            if(!isSingleEvent){
+                                if (key == value.key) {
+                                   $scope.events.splice(key1,1);
+                                }else{
+                                    $scope.addMarkerEvent(value,true)
+                                }
+                            }else {
+                                $scope.addMarkerEvent(value,true)
+                            }
+                          }
+
+                       
+                        // console.log("key_exited key :: ", key);
+                        // console.log("key_exited key :: ", key1);
+                        // if (value.$id == key || value['$id'] == key) {
+                        //     navigator.geolocation.clearWatch($scope.watchID);
+                    
+                        //     $scope.events.splice(key1,1);
+                        // } else {
+                        //     console.log("key_exited key else :: " + key1);
+                        //     $scope.addMarker(value);
+                        // }
+
+                    });
+
+                     }
+
+     }
+
+
 
 
 
@@ -788,7 +849,6 @@ alert(data);
 
     $scope.nextPage = function () {
         //if ($scope.currentPageIndex < 2) {
-
         //
         //}
         $scope.currentPageIndex++;
@@ -818,12 +878,14 @@ alert(data);
 
                 var date=new Date().getTime();
                 var expDate = suc * 60 * 1000 + date;
+                console.log("expDate and ", expDate );
                 $scope.currentPage = $scope.pages[$scope.currentPageIndex]
                 $scope.mapHeight = { "top": "52px", "bottom": "107px" };
 
             
                 // $scope.currentPageIndex--;
                    $scope.map.remove();
+
                    $state.go('picture', { data: JSON.stringify({ photoUrl: $scope.selectedImage, eventDetail: $scope.eventText, Latitude: $scope.myLatitude, Longitude: $scope.myLongitude, expireTime: expDate, isExpired: false, CreatedBy: localStorage.getItem('UserId'), CreatedTime: date,PeopleJoined:true }) })
         
             },function(er){
@@ -867,27 +929,33 @@ alert(data);
 /***************  Drop Event Function Code Starts **********************/
     $scope.dropOut = function (eventDetail) {
         // $scope.currentPageIndex = 0;
-        $scope.getUserJoinedInEvent();
+        // $scope.getUserJoinedInEvent();
+        console.log("eventDetail ** : " , eventDetail);
         $scope.closeModal();
-        if (localStorage.getItem('UserId') == eventDetail.createdBy) {
+        $scope.joinedPeople = [];
+        if (localStorage.getItem('UserId') == eventDetail.CreatedBy) {
             console.log("Event created by logged-in user!!");
             firebaseservices.updateData('Events', eventDetail.key, { isExpired: true }).then(function () {
                 console.log("insde UpdateData removeDataFromNodesuccess!!");
 
                 firebaseservices.removeDataFromNode('EventsLocation/' + eventDetail.key);
+                firebaseservices.updateData('Users', localStorage.getItem('UserId') + '/CreatedEvents/' + eventDetail.key, { isEventLive: false })
                 firebaseservices.removeDataFromNode('Events/' + eventDetail.key + '/PeopleJoined/');
                 angular.forEach(eventDetail.PeopleJoined, function (value, key) {
+                    
                     firebaseservices.updateData('Users', key + '/joinedEvent/' + eventDetail.key, { isJoinedInEvent: false })
                 });
 
+                
             });
 
         } else {
+
             console.log("Event did not create by logged-in user!!");
-            firebaseservices.removeDataFromNode('EventsLocation/' + eventDetail.key);
+            // firebaseservices.removeDataFromNode('EventsLocation/' + eventDetail.key);
             firebaseservices.removeDataFromNode('Events/' + eventDetail.key + '/PeopleJoined/' + localStorage.getItem('UserId'));
             firebaseservices.updateData('Users', localStorage.getItem('UserId') + '/joinedEvent/' + eventDetail.key, { isJoinedInEvent: false })
-
+           $scope.dropFromToEvent(true, eventDetail.key);
         }
 
     }
@@ -956,20 +1024,23 @@ alert(data);
 
 /****************   Join Event Function Code Starts ******************************/
     $scope.joinEvent = function (id) {
-        $scope.currentPageIndex=3;
        // $scope.notSelectedEvent = true;
         //  mapservices.mapClikable(false)
+        $rootScope.amIEventPart = $scope.myEvent;
         $scope.map.setClickable(true);
         $scope.openModalAccept.hide();
-        $scope.mapHeight = { "top": "52px", "bottom": "107px" };
+        $scope.displayTab();
+        
+        // .$scope.myEventhide();
         console.log($scope.markerDetails)
-        $scope.currentPage = $scope.pages[$scope.currentPageIndex];
         var data={};
         data[localStorage.getItem('UserId')]=true;
 
         firebaseservices.setDataToNode('Events/' + id + '/PeopleJoined', data)
-        firebaseservices.setDataToNode('Users/' + localStorage.getItem('UserId') + '/joinedEvent/' + id, { eventId: id, isJoinedInEvent: true }).then(function (res) {
-            $scope.getUserJoinedInEvent();
+        firebaseservices.setDataToNode('Users/' + localStorage.getItem('UserId') + '/joinedEvent/' + id, { isJoinedInEvent: true }).then(function (res) {
+            // $scope.getUserJoinedInEvent();
+            $scope.eventTimeLeft($scope.myEvent)
+             $scope.getPeopleJoined($scope.myEvent);
         })
 
     }
@@ -1014,14 +1085,28 @@ alert(data);
     $scope.sendNotification = function () {
        // alert('notify');
         console.log($scope.joinedPeople)
+        console.log("$scope.messageTemplates : " ,$scope.messageTemplates);
+        // alert("[$scope.select.selectedText :", $scope.select.selectedText);
+
+        // alert("$scope.messageTemplates[$scope.select.selectedText - 1].text : ", $scope.messageTemplates[$scope.select.selectedText - 1].text)
         angular.forEach($scope.joinedPeople,function(value,key){
             firebaseservices.getDataFromNodeValue('Users/' + value.key + '/NotificationEnabled/Message').then(function (res) {
                 if (res) {
-
                     firebaseservices.addDataToArray('UserPushNotification/' + value.key, { SenderId: localStorage.getItem('UserId'), message: $scope.messageTemplates[$scope.select.selectedText - 1].text })
                 }
             })
         })
+
+         if($scope.myEvent.createdBy != localStorage.getItem('UserId')){
+            firebaseservices.getDataFromNodeValue('Users/' + $scope.myEvent.createdBy + '/NotificationEnabled/Message').then(function (res) {
+                if (res) {
+
+                    firebaseservices.addDataToArray('UserPushNotification/' + $scope.myEvent.CreatedBy, { SenderId: localStorage.getItem('UserId'), message: $scope.messageTemplates[$scope.select.selectedText - 1].text })
+                }
+            })
+         }
+
+        
     }
     $scope.feedback = function () {
         $state.go('feedback');
@@ -1042,7 +1127,8 @@ alert(data);
         $ionicSlideBoxDelegate.update()
     }
     $scope.firstFooterShow = function () {
-        $scope.backTemplates = true; $scope.backArrow = false; $scope.profileShow = false; $scope.bg_text = 'Experience Details'; $scope.select.selectedText = 0;
+        $scope.backTemplates = true; $scope.backArrow = false; $scope.profileShow = false; $scope.bg_text = 'Experience Details'; 
+        // $scope.select.selectedText = 0;
         if (ionic.Platform.isWebView()) {
 
             $scope.map.setClickable(true);
@@ -1077,6 +1163,10 @@ alert(data);
                     // Sign-out successful.
                     // scope.currentPageIndex = 0;
                     scope.closeModal();
+                    localStorage.setItem('UserId', null);
+                    localStorage.setItem('UserLoggedIn', 'false');
+                    localStorage.setItem('myDetails', null);
+                    // alert(JSON.stringify(success));
 
                 }, function (error) {
                     // An error happened.

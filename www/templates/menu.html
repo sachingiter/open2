@@ -23,7 +23,7 @@
         <div class="header-cls" style="text-align:center;width: 100vw;height:80px;padding-top: 10px;">
             <h4 style="color: white;    font-size: 14px;
     font-weight: 600;">
-                Where is your OPen2 talking place?
+                Where is your OPen2 taking place?
             </h4>
         </div>
     </ion-header-bar>
@@ -96,7 +96,7 @@
     </ion-footer-bar>-->
     <div class="bar bar-footer bar-footer-cls" ng-show="currentPage=='createdEvents'">
      <span class="back-img" ng-show="backArrow" ng-click="firstFooterShow();"><img src="img/back.png"/></span>
-        <p class="bg-img-txt" ng-show="(select.selectedText==0)">{{bg_text}}{{select.selectedText}}</p>
+        <p class="bg-img-txt" ng-show="(select.selectedText==0)">{{bg_text}}</p>
         <p class="bg-img-txt" ng-click="sendNotification()" ng-show="(select.selectedText>0)">Send Message <i class="icon ion-android-send"></i></p>
         <div class="row text-center background_footer" ng-show="backTemplates&&!profileShow">
           

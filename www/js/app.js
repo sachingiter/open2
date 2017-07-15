@@ -97,6 +97,7 @@ open2.run(function ($ionicPlatform, $cordovaGeolocation, $state, $firebaseAuth) 
              });
              window.FirebasePlugin.onNotificationOpen(function (notification) {
                  console.log(notification);
+                 alert(notification.body);
              }, function (error) {
                  console.error(error);
              });

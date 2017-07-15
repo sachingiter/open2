@@ -114,9 +114,11 @@
 
             firebaseservices.addDataToFirebase(data, 'Events').then(function (res) {
                 // $scope.currentPageIndex--;
+
                 console.log(res);
+                 $rootScope.amIEventPart = res;
                var data1={};
-               data1[res]={isEventLive:true};
+               data1[res.key]={isEventLive:true};
                //res.key:{}
                firebaseservices.setDataToNode('Users/'+ localStorage.getItem('UserId')+'/CreatedEvents',data1)
                 // $rootScope.watchPosition(res);
